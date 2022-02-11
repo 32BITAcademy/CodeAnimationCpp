@@ -157,6 +157,7 @@
     <ClInclude Include="BasicTypes.h" />
     <ClInclude Include="CodeAnimation.h" />
     <ClInclude Include="MSG.h" />
+    <ClInclude Include="TypeDefines.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

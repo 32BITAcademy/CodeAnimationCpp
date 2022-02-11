@@ -86,6 +86,22 @@ public:
 		return *this;
 	}
 
+	BasicType<T>& operator=(T b)
+	{
+		_value = b;
+
+		CodeAnimation* ca = CodeAnimation::GetInstance();
+		MSG m;
+		m.type = MsgType::SET_VAR_VALUE;
+		m.set_var_value.dataType = _type;
+		strcpy_s(m.set_var_value.name, NAME_LENGTH, _name);
+		strcpy_s(m.set_var_value.var_name, NAME_LENGTH, "value");
+		ca->Send(m);
+
+		ca->WaitEndOfAnimation();
+		return *this;
+	}
+
 	template <typename S>
 	bool operator==(BasicType<S> &b)
 	{
@@ -149,11 +165,11 @@ public:
 	friend bool operator==(int a, BasicType<T> &b);
 };
 
-typedef BasicType<int> Int;
-typedef BasicType<float> Float;
-typedef BasicType<double> Double;
-typedef BasicType<bool> Bool;
-typedef BasicType<char> Char;
+typedef BasicType<int> INT;
+typedef BasicType<float> FLOAT;
+typedef BasicType<double> DOUBLE;
+typedef BasicType<bool> BOOL;
+typedef BasicType<char> CHAR;
 
 template <typename T>
 bool operator==(int a, BasicType<T> &b)
