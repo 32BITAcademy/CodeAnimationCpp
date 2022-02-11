@@ -46,14 +46,7 @@ public:
 		m.create_var.dataType = _type;
 		strcpy_s(m.create_var.name, NAME_LENGTH, name);
 		m.create_var.isSet = set;
-		switch (_type)
-		{
-		case DataType::INT: m.create_var.value._int = (int)v; break;
-		case DataType::FLOAT: m.create_var.value._float = (float)v; break;
-		case DataType::DOUBLE: m.create_var.value._double = (double)v; break;
-		case DataType::BOOL: m.create_var.value._bool = (bool)v; break;
-		case DataType::CHAR: m.create_var.value._char = (char)v; break;
-		}
+		SetValue(m.create_var.value, v);
 		ca->Send(m);
 
 		while (ca->IsAnimating()) sf::sleep(sf::milliseconds(16));
@@ -95,7 +88,7 @@ public:
 		m.type = MsgType::SET_VAR_VALUE;
 		m.set_var_value.dataType = _type;
 		strcpy_s(m.set_var_value.name, NAME_LENGTH, _name);
-		strcpy_s(m.set_var_value.var_name, NAME_LENGTH, "value");
+		SetValue(m.set_var_value.value, b);
 		ca->Send(m);
 
 		ca->WaitEndOfAnimation();

@@ -7,15 +7,8 @@ enum class MsgType{ ERROR, QUIT, CREATE_VAR, CREATE_ARR, SET_VAR_VALUE, SET_VAR_
 enum class DataType{ UNDEFINED, INT, FLOAT, DOUBLE, BOOL, CHAR };
 enum class CompareOper{ EQUAL, GREATER, EQ_GREATER, LESSER, EQ_LESSER, NOT_EQUAL };
 
-char DataTypeNames[6][10] = { "undefined", "int", "float", "double", "bool", "char" };
-char* nameof(DataType &t)
-{
-	int x = static_cast<int>(t);
-	if (x > 5 || x < 0) { x = 0; t = DataType::UNDEFINED; }
-	return DataTypeNames[x];
-}
-
-#define NAME_LENGTH 200
+extern char DataTypeNames[6][10];
+char* nameof(DataType& t);
 
 union MsgValue{
 	int _int;
@@ -24,6 +17,33 @@ union MsgValue{
 	bool _bool;
 	char _char;
 };
+
+#define NAME_LENGTH 200
+
+void SetValue(MsgValue& m, int v);
+void SetValue(MsgValue& m, float v);
+void SetValue(MsgValue& m, double v);
+void SetValue(MsgValue& m, bool v);
+void SetValue(MsgValue& m, char v);
+
+template<DataType t>
+struct ValueType;
+template<> struct ValueType<DataType::INT> { typedef int mytype; };
+template<> struct ValueType<DataType::FLOAT> { typedef float mytype; };
+template<> struct ValueType<DataType::DOUBLE> { typedef double mytype; };
+template<> struct ValueType<DataType::BOOL> { typedef bool mytype; };
+template<> struct ValueType<DataType::CHAR> { typedef char mytype; };
+
+template <DataType t>
+typename ValueType<t>::mytype GetValue(MsgValue& m);
+
+template<> int GetValue<DataType::INT>(MsgValue& m) { return m._int; }
+template<> float GetValue<DataType::FLOAT>(MsgValue& m) { return m._float; }
+template<> double GetValue<DataType::DOUBLE>(MsgValue& m) { return m._double; }
+template<> bool GetValue<DataType::BOOL>(MsgValue& m) { return m._bool; }
+template<> char GetValue<DataType::CHAR>(MsgValue& m) { return m._char; }
+
+std::string GetValueString(MsgValue& m, DataType t);
 
 struct MSG
 {
@@ -112,5 +132,6 @@ struct MSG
 		}
 	}
 	~MSG() { }
+	std::string DebugString();
 };
 
