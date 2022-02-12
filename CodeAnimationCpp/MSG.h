@@ -4,7 +4,15 @@
 enum class MsgType{ ERROR, QUIT, CREATE_VAR, CREATE_ARR, SET_VAR_VALUE, SET_VAR_VAR, SET_ARR_VALUE, SET_ARR_VAR,
 					OPER_IF, OPER_WHILE_START, OPER_WHILE_CHECK,
 					OPER_COMPARE};
+
 enum class DataType{ UNDEFINED, INT, FLOAT, DOUBLE, BOOL, CHAR };
+
+DataType GetType(int a);
+DataType GetType(float a);
+DataType GetType(double a);
+DataType GetType(bool a);
+DataType GetType(char a);
+
 enum class CompareOper{ EQUAL, GREATER, EQ_GREATER, LESSER, EQ_LESSER, NOT_EQUAL };
 
 extern char DataTypeNames[6][10];
@@ -25,23 +33,7 @@ void SetValue(MsgValue& m, float v);
 void SetValue(MsgValue& m, double v);
 void SetValue(MsgValue& m, bool v);
 void SetValue(MsgValue& m, char v);
-
-template<DataType t>
-struct ValueType;
-template<> struct ValueType<DataType::INT> { typedef int mytype; };
-template<> struct ValueType<DataType::FLOAT> { typedef float mytype; };
-template<> struct ValueType<DataType::DOUBLE> { typedef double mytype; };
-template<> struct ValueType<DataType::BOOL> { typedef bool mytype; };
-template<> struct ValueType<DataType::CHAR> { typedef char mytype; };
-
-template <DataType t>
-typename ValueType<t>::mytype GetValue(MsgValue& m);
-
-template<> int GetValue<DataType::INT>(MsgValue& m) { return m._int; }
-template<> float GetValue<DataType::FLOAT>(MsgValue& m) { return m._float; }
-template<> double GetValue<DataType::DOUBLE>(MsgValue& m) { return m._double; }
-template<> bool GetValue<DataType::BOOL>(MsgValue& m) { return m._bool; }
-template<> char GetValue<DataType::CHAR>(MsgValue& m) { return m._char; }
+void SetValue(MsgValue& m, MsgValue &v);
 
 std::string GetValueString(MsgValue& m, DataType t);
 
@@ -59,24 +51,26 @@ struct MSG
 
 		struct {
 			bool result;
-			CompareOper type;
+			CompareOper comp_type;
 			bool is1var;
 			bool is2var;
 			char name1[NAME_LENGTH];
 			char name2[NAME_LENGTH];
 			MsgValue value1;
 			MsgValue value2;
+			DataType dataType1 = DataType::UNDEFINED;
+			DataType dataType2 = DataType::UNDEFINED;
 		} oper_compare;
 
 		struct{
-			DataType dataType = DataType::INT;
+			DataType dataType = DataType::UNDEFINED;
 			char name[NAME_LENGTH];
 			bool isSet = false;
 			MsgValue value;
 		} create_var;
 
 		struct {
-			DataType dataType = DataType::INT;
+			DataType dataType = DataType::UNDEFINED;
 			char name[NAME_LENGTH];
 			int size = 1;
 			bool isSet = false;
@@ -84,26 +78,27 @@ struct MSG
 		} create_arr;
 
 		struct {
-			DataType dataType = DataType::INT;
+			DataType dataType = DataType::UNDEFINED;
 			char name[NAME_LENGTH];
 			MsgValue value;
 		} set_var_value;
 
 		struct {
-			DataType dataType = DataType::INT;
+			DataType dataType = DataType::UNDEFINED;
 			char name[NAME_LENGTH];
 			char var_name[NAME_LENGTH];
+			MsgValue value;
 		} set_var_var;
 
 		struct {
-			DataType dataType = DataType::INT;
+			DataType dataType = DataType::UNDEFINED;
 			char name[NAME_LENGTH];
 			MsgValue value;
 			int index;
 		} set_arr_value;
 
 		struct {
-			DataType dataType = DataType::INT;
+			DataType dataType = DataType::UNDEFINED;
 			char name[NAME_LENGTH];
 			char var_name[NAME_LENGTH];
 			int index;

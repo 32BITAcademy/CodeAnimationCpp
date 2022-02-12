@@ -10,7 +10,7 @@ void CA_IF(bool result)
 	m.type = MsgType::OPER_IF;
 	m.oper_if.result = result;
 	ca->Send(m);
-	while (ca->IsAnimating()) sf::sleep(sf::milliseconds(16));
+	ca->WaitEndOfAnimation();
 }
 
 void CA_WHILE_START()
@@ -29,6 +29,6 @@ bool CA_WHILE_CHECK(bool result)
 	m.type = MsgType::OPER_WHILE_CHECK;
 	m.oper_while.result = result;
 	ca->Send(m);
-	while (ca->IsAnimating()) sf::sleep(sf::milliseconds(16));
+	ca->WaitEndOfAnimation();
 	return result;
 }

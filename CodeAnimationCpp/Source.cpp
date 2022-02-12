@@ -15,7 +15,7 @@ int main()
 	a = 5;
 
 	f = a;
-	If(f == a)
+	If(a==f)
 		cout << "YES!!!" << endl;
 	Else
 		cout << "NOOOO!" << endl;

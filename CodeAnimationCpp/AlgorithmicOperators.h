@@ -2,7 +2,7 @@
 
 extern bool CA_TMP_BOOL_RESULT;
 
-#define If(x) CA_TMP_BOOL_RESULT = x; CA_IF(CA_TMP_BOOL_RESULT); if(CA_TMP_BOOL_RESULT)
+#define If(x) CA_TMP_BOOL_RESULT = (x); CA_IF(CA_TMP_BOOL_RESULT); if(CA_TMP_BOOL_RESULT)
 #define Else else
 
 #define While(x) CA_WHILE_START(); while(CA_WHILE_CHECK(x))

@@ -57,7 +57,7 @@ void CodeAnimation::MainCycle()
 						case DataType::DOUBLE: cout << m.create_arr.value._double; break;
 						case DataType::BOOL: cout << m.create_arr.value._bool; break;
 						case DataType::CHAR: cout << m.create_arr.value._char; break;
-						default: cout << "undefined"; break;
+						default: cout << "UNDEFINED"; break;
 						}
 					}
 					cout << "." << endl;
@@ -75,7 +75,7 @@ void CodeAnimation::MainCycle()
 						case DataType::DOUBLE: cout << m.create_var.value._double; break;
 						case DataType::BOOL: cout << m.create_var.value._bool; break;
 						case DataType::CHAR: cout << m.create_var.value._char; break;
-						default: cout << "undefined"; break;
+						default: cout << "UNDEFINED"; break;
 						}
 					}
 					cout << "." << endl;
