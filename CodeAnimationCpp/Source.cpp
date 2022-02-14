@@ -1,24 +1,22 @@
 #include<iostream>
-#include "CodeAnimation.h"
-#include "BasicTypes.h"
-#include "AlgorithmicOperators.h"
-#include "TypeDefines.h"
+#include "CodeAnimationLibrary.h"
 
 using namespace std;
 
 int main()
 {
 	CodeAnimation::Init();
+	CodeAnimation::DebugMode();
 
-	Int(a, b, c, f);
-
-	a = 5;
-
-	f = a;
-	If(a==f)
-		cout << "YES!!!" << endl;
-	Else
-		cout << "NOOOO!" << endl;
+	Int(sum, i);
+	sum = 0;
+	i = 1;
+	While(i <= 5)
+	{
+		sum += i;
+		i++;
+	}
+	cout << "Sum = " << sum << endl;
 
 	CodeAnimation::Quit();
 	return 0;

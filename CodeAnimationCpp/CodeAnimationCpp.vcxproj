@@ -157,6 +157,7 @@
     <ClInclude Include="AlgorithmicOperators.h" />
     <ClInclude Include="BasicTypes.h" />
     <ClInclude Include="CodeAnimation.h" />
+    <ClInclude Include="CodeAnimationLibrary.h" />
     <ClInclude Include="MSG.h" />
     <ClInclude Include="TypeDefines.h" />
   </ItemGroup>

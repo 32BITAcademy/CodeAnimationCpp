@@ -9,12 +9,15 @@ class CodeAnimation
 private:
 	static CodeAnimation* instance;
 	
+	bool debug_on;
 	sf::Thread thread;
 	int win_height, win_width;
 	sf::RenderWindow* win;
 	std::list<MSG> msgs;
 	sf::Mutex mutex;
 	bool animating;
+
+	int code_depth = 0;
 	
 	CodeAnimation();
 	void MainCycle();
@@ -28,4 +31,5 @@ public:
 	static CodeAnimation* GetInstance();
 	static void Init();
 	static void Quit();
+	static void DebugMode(bool on = true);
 };

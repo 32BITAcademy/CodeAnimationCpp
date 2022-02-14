@@ -44,5 +44,8 @@
     <ClInclude Include="TypeDefines.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="CodeAnimationLibrary.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
