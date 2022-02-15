@@ -32,3 +32,23 @@ bool CA_WHILE_CHECK(bool result)
 	ca->WaitEndOfAnimation();
 	return result;
 }
+
+void CA_FOR_START()
+{
+	CodeAnimation* ca = CodeAnimation::GetInstance();
+	MSG m;
+	m.type = MsgType::OPER_FOR_START;
+	ca->Send(m);
+	ca->WaitEndOfAnimation();
+}
+
+bool CA_FOR_CHECK(bool result)
+{
+	CodeAnimation* ca = CodeAnimation::GetInstance();
+	MSG m;
+	m.type = MsgType::OPER_FOR_CHECK;
+	m.oper_for.result = result;
+	ca->Send(m);
+	ca->WaitEndOfAnimation();
+	return result;
+}

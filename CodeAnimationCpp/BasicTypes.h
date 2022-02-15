@@ -88,7 +88,8 @@ public:
 		while (ca->IsAnimating()) sf::sleep(sf::milliseconds(16));
 	}
 
-	/*BasicType(const char* name, T v) : _value(v), set(true) {
+	template  <typename S>
+	BasicType(const char* name, S v) {
 		if (std::is_same<T, int>::value) _v.value.type = DataType::INT;
 		if (std::is_same<T, float>::value) _v.value.type = DataType::FLOAT;
 		if (std::is_same<T, double>::value) _v.value.type = DataType::DOUBLE;
@@ -96,17 +97,19 @@ public:
 		if (std::is_same<T, char>::value) _v.value.type = DataType::CHAR;
 		strcpy_s(_v.name, NAME_LENGTH, name);
 		_v.isSet = true;
-		SetValue(_v.value.value, v);
+		SetValue(_v.value.value, (T)v);
+		_value = (T)v;
 
 		CodeAnimation* ca = CodeAnimation::GetInstance();
 		MSG m;
 		m.type = MsgType::CREATE_VAR;
-		m.create_var.dataType = _type;
-		SetValue(m.create_var.value, v);
+		m.create_var.var = _v;
+		SetValue(m.create_var.value.value, v);
+		m.create_var.value.type = GetType(v);
 		ca->Send(m);
 
 		while (ca->IsAnimating()) sf::sleep(sf::milliseconds(16));
-	}*/
+	}
 
 	BasicType(const BasicType& b) { 
 		_v = b._v;

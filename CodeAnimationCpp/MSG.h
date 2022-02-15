@@ -2,7 +2,7 @@
 #include<string>
 
 enum class MsgType{ ERROR, QUIT, CREATE_VAR, CREATE_ARR, SET_VAR_VALUE, SET_VAR_VAR, SET_ARR_VALUE, SET_ARR_VAR,
-					OPER_IF, OPER_WHILE_START, OPER_WHILE_CHECK,
+					OPER_IF, OPER_WHILE_START, OPER_WHILE_CHECK, OPER_FOR_START, OPER_FOR_CHECK,
 					OPER_COMPARE, OPER_CHANGE_BY_VALUE, OPER_CHANGE_BY_VAR };
 
 enum class DataType{ UNDEFINED, INT, FLOAT, DOUBLE, BOOL, CHAR };
@@ -134,6 +134,10 @@ struct MSG
 		struct {
 			bool result;
 		} oper_while;
+
+		struct {
+			bool result;
+		} oper_for;
 	};
 
 	MSG();

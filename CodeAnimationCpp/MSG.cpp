@@ -57,6 +57,8 @@ MSG::MSG(const MSG& m) {
 	case MsgType::OPER_IF: oper_if = m.oper_if; break;
 	case MsgType::OPER_WHILE_START: break;
 	case MsgType::OPER_WHILE_CHECK: oper_while = m.oper_while; break;
+	case MsgType::OPER_FOR_START: break;
+	case MsgType::OPER_FOR_CHECK: oper_for = m.oper_for; break;
 
 	case MsgType::OPER_CHANGE_BY_VALUE: oper_change_value = m.oper_change_value; break;
 	case MsgType::OPER_CHANGE_BY_VAR: oper_change_var = m.oper_change_var; break;
@@ -119,9 +121,21 @@ string MSG::DebugString()
 		break;
 
 	case MsgType::OPER_WHILE_CHECK:
-		s += "Operator while checked cycle condition, result is ";
+		s += "Operator While checked cycle condition, result is ";
 		if (oper_while.result)
 			s += "TRUE. Cycle While continues";
+		else
+			s += "FALSE.";
+		break;
+
+	case MsgType::OPER_FOR_START:
+		s += "Started cycle For";
+		break;
+
+	case MsgType::OPER_FOR_CHECK:
+		s += "Operator For checked cycle condition, result is ";
+		if (oper_for.result)
+			s += "TRUE. Cycle For continues";
 		else
 			s += "FALSE.";
 		break;

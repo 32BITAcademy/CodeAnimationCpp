@@ -85,7 +85,7 @@ void CodeAnimation::MainCycle()
 
 				if (debug_on)
 				{
-					if (m.type == MsgType::OPER_WHILE_CHECK)
+					if (m.type == MsgType::OPER_WHILE_CHECK || m.type == MsgType::OPER_FOR_CHECK)
 						for (int i = 0; i < code_depth*4 - 1; i++)
 							cout << " ";
 					else
@@ -94,17 +94,18 @@ void CodeAnimation::MainCycle()
 					
 					cout << m.DebugString() << endl;
 
-					if (m.type == MsgType::OPER_WHILE_START)
+					if (m.type == MsgType::OPER_WHILE_START || m.type == MsgType::OPER_FOR_START)
 					{
 						code_depth++;
 					}
 
-					if (m.type == MsgType::OPER_WHILE_CHECK && !m.oper_while.result)
+					if (m.type == MsgType::OPER_WHILE_CHECK && !m.oper_while.result ||
+						m.type == MsgType::OPER_FOR_CHECK && !m.oper_for.result )
 					{
 						code_depth--;
 						for (int i = 0; i < code_depth; i++)
 							cout << "    ";
-						cout << "Cycle While stopped" << endl;
+						cout << "Cycle For stopped" << endl;
 					}
 				}
 			}
