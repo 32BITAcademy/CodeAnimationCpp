@@ -3,7 +3,7 @@
 
 enum class MsgType{ ERROR, QUIT, CREATE_VAR, CREATE_ARR, SET_VAR_VALUE, SET_VAR_VAR, SET_ARR_VALUE, SET_ARR_VAR,
 					OPER_IF, OPER_WHILE_START, OPER_WHILE_CHECK, OPER_FOR_START, OPER_FOR_CHECK,
-					OPER_COMPARE, OPER_CHANGE_BY_VALUE, OPER_CHANGE_BY_VAR };
+					OPER_CHANGE_BY, OPER_SIGN, OPER_ARITHMETIC, OPER_COMPARE, OPER_LOGIC };
 
 enum class DataType{ UNDEFINED, INT, FLOAT, DOUBLE, BOOL, CHAR };
 
@@ -13,8 +13,11 @@ DataType GetType(double a);
 DataType GetType(bool a);
 DataType GetType(char a);
 
+enum class ChangeOper{ INCREASE_BY, DECREASE_BY, MULTIPLY_BY, DIVIDE_BY, MODULO_BY };
+enum class SignOper{ PLUS, MINUS };
+enum class ArithmeticOper{ ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, MODULO };
 enum class CompareOper{ EQUAL, GREATER, EQ_GREATER, LESSER, EQ_LESSER, NOT_EQUAL };
-enum class ChangeOper{ INCREASE };
+enum class LogicOper{ AND, OR, NOT };
 
 extern char DataTypeNames[6][10];
 char* CA_NameOf(DataType& t);
@@ -29,11 +32,11 @@ union MsgValue{
 
 #define NAME_LENGTH 200
 
-void SetValue(MsgValue& m, int v);
-void SetValue(MsgValue& m, float v);
-void SetValue(MsgValue& m, double v);
-void SetValue(MsgValue& m, bool v);
-void SetValue(MsgValue& m, char v);
+void CA_SetValue(MsgValue& m, int v);
+void CA_SetValue(MsgValue& m, float v);
+void CA_SetValue(MsgValue& m, double v);
+void CA_SetValue(MsgValue& m, bool v);
+void CA_SetValue(MsgValue& m, char v);
 
 std::string CA_ConvertValueToString(MsgValue& m, DataType t);
 
@@ -41,20 +44,34 @@ struct ValueDescription
 {
 	MsgValue value;
 	DataType type;
+	bool isGarbage = true;
 
 	std::string GetValue();
 	std::string GetShortString();
 	std::string GetFullString();
+
+	template <typename T>
+	void SetValue(T v)
+	{
+		CA_SetValue(value, v);
+		isGarbage = false;
+	}
 };
 
 struct VariableDescription
 {
 	char name[NAME_LENGTH];
-	bool isSet;
 	ValueDescription value;
 
 	std::string GetValue();
 	std::string GetFullString();
+	bool IsSet();
+
+	template <typename T>
+	void SetValue(T v)
+	{
+		value.SetValue(v);
+	}
 };
 
 struct MSG
@@ -99,21 +116,57 @@ struct MSG
 		} set_arr_var;*/
 
 		struct {
-			ChangeOper change_oper;
-			VariableDescription var;
-			ValueDescription value;
+			ChangeOper change_type;
+			VariableDescription varWhat;
+			bool isByVar;
+			union {
+				VariableDescription varBy;
+				ValueDescription valueBy;
+			};
 			ValueDescription result;
-		} oper_change_value;
+		} oper_change_by;
 
 		struct {
-			ChangeOper change_oper;
-			VariableDescription varWHAT;
-			VariableDescription varBY;
+			SignOper sign_type;
+			bool isVar;
+			union {
+				VariableDescription var;
+				ValueDescription value;
+			};
 			ValueDescription result;
-		} oper_change_var;
+		} oper_sign;
 
 		struct {
-			bool result;
+			ArithmeticOper arithm_type;
+			bool is1var;
+			bool is2var;
+			union {
+				VariableDescription var1;
+				ValueDescription value1;
+			};
+			union {
+				VariableDescription var2;
+				ValueDescription value2;
+			};
+			ValueDescription result;
+		} oper_arithm;
+
+		struct {
+			LogicOper logic_type;
+			bool is1var;
+			bool is2var;
+			union {
+				VariableDescription var1;
+				ValueDescription value1;
+			};
+			union {
+				VariableDescription var2;
+				ValueDescription value2;
+			};
+			ValueDescription result;
+		} oper_logic;
+
+		struct {
 			CompareOper comp_type;
 			bool is1var;
 			bool is2var;
@@ -125,6 +178,7 @@ struct MSG
 				VariableDescription var2;
 				ValueDescription value2;
 			};
+			bool result;
 		} oper_compare;
 
 		struct {

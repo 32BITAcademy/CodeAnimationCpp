@@ -70,14 +70,14 @@ class BasicType
 
 	BasicType();
 public:
-	BasicType(const char* name) {
+	BasicType(const char* name) : _value(0) {
 		if (std::is_same<T, int>::value) _v.value.type = DataType::INT;
 		if (std::is_same<T, float>::value) _v.value.type = DataType::FLOAT;
 		if (std::is_same<T, double>::value) _v.value.type = DataType::DOUBLE;
 		if (std::is_same<T, bool>::value) _v.value.type = DataType::BOOL;
 		if (std::is_same<T, char>::value) _v.value.type = DataType::CHAR;
 		strcpy_s(_v.name, NAME_LENGTH, name);
-		_v.isSet = false;
+		_v.value.isGarbage = true;
 
 		CodeAnimation* ca = CodeAnimation::GetInstance();
 		MSG m;
@@ -85,7 +85,7 @@ public:
 		m.create_var.var = _v;
 		ca->Send(m);
 
-		while (ca->IsAnimating()) sf::sleep(sf::milliseconds(16));
+		ca->WaitEndOfAnimation();
 	}
 
 	template  <typename S>
@@ -96,25 +96,25 @@ public:
 		if (std::is_same<T, bool>::value) _v.value.type = DataType::BOOL;
 		if (std::is_same<T, char>::value) _v.value.type = DataType::CHAR;
 		strcpy_s(_v.name, NAME_LENGTH, name);
-		_v.isSet = true;
-		SetValue(_v.value.value, (T)v);
 		_value = (T)v;
+		_v.SetValue(_value);
 
 		CodeAnimation* ca = CodeAnimation::GetInstance();
 		MSG m;
 		m.type = MsgType::CREATE_VAR;
 		m.create_var.var = _v;
-		SetValue(m.create_var.value.value, v);
+		m.create_var.value.SetValue(v);
 		m.create_var.value.type = GetType(v);
 		ca->Send(m);
 
-		while (ca->IsAnimating()) sf::sleep(sf::milliseconds(16));
+		ca->WaitEndOfAnimation();
 	}
 
 	BasicType(const BasicType& b) { 
 		_v = b._v;
 		_value = b._value;
 	}
+	
 	~BasicType() {}
 
 	T value() { return _value; }
@@ -133,8 +133,7 @@ public:
 		ca->Send(m);
 		
 		_value = b._value;
-		SetValue(_v.value.value, _value);
-		_v.isSet = true;
+		_v.value.value, _value);
 
 		ca->WaitEndOfAnimation();
 		return *this;
@@ -164,14 +163,36 @@ public:
 	{
 		CodeAnimation* ca = CodeAnimation::GetInstance();
 		MSG m;
+		m.type = MsgType::OPER_CHANGE_BY;
+		m.oper_change_by.change_type = ChangeOper::INCREASE_BY;
+		m.oper_change_by.isByVar = true;
+		m.oper_change_by.varWhat = _v;
+		m.oper_change_by.varBy = b._v;
+
+		_value += b._value;
+		_v.SetValue(_value);
+		
+		m.oper_change_by
+			.result = _v.value;
+		ca->Send(m);
+
+		ca->WaitEndOfAnimation();
+		return *this;
+	}
+
+	template <typename S>
+	BasicType<T>& operator-=(BasicType<S>& b)
+	{
+		CodeAnimation* ca = CodeAnimation::GetInstance();
+		MSG m;
 		m.type = MsgType::OPER_CHANGE_BY_VAR;
 		m.oper_change_var.change_oper = ChangeOper::INCREASE;
 		m.oper_change_var.varWHAT = _v;
 		m.oper_change_var.varBY = b._v;
 
-		_value += b._value;
+		_value -= b._value;
 		SetValue(_v.value.value, _value);
-		
+
 		m.oper_change_var.result = _v.value;
 		ca->Send(m);
 
