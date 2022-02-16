@@ -68,8 +68,11 @@ class BasicType
 	T _value;
 	VariableDescription _v;
 
-	BasicType();
+	BasicType() {}
 public:
+
+#pragma region CONSTRUCTORS
+
 	BasicType(const char* name) : _value(0) {
 		if (std::is_same<T, int>::value) _v.value.type = DataType::INT;
 		if (std::is_same<T, float>::value) _v.value.type = DataType::FLOAT;
@@ -117,8 +120,12 @@ public:
 	
 	~BasicType() {}
 
+#pragma endregion //CONSTRUCTORS
+
+#pragma region SETTERS
+
 	T value() { return _value; }
-	void value(T v) { _value = v; }
+	void value(T v, bool not_garbage = true) { _value = v; if (not_garbage) _v.SetValue(v); }
 	DataType type() { return _v.value.type; }
 	const char* name() { return _v.name; }
 
@@ -127,13 +134,16 @@ public:
 	{
 		CodeAnimation* ca = CodeAnimation::GetInstance();
 		MSG m;
-		m.type = MsgType::SET_VAR_VAR;
-		m.set_var_var.varD = _v;
-		m.set_var_var.varS = b._v;
+		m.type = MsgType::SET_VAR;
+		m.set_var.varWhat = _v;
+		m.set_var.isByVar = true;
+		m.set_var.varBy = b._v;
+
+		_value = (T)b._value;
+		_v.SetValue(_value);
+
+		m.set_var.result = _v.value;
 		ca->Send(m);
-		
-		_value = b._value;
-		_v.value.value, _value);
 
 		ca->WaitEndOfAnimation();
 		return *this;
@@ -144,88 +154,186 @@ public:
 	{
 		CodeAnimation* ca = CodeAnimation::GetInstance();
 		MSG m;
-		m.type = MsgType::SET_VAR_VALUE;
-		m.set_var_value.var = _v;
-		SetValue(m.set_var_value.value.value, b);
-		m.set_var_value.value.type = GetType(b);
-		ca->Send(m);
+		m.type = MsgType::SET_VAR;
+		m.set_var.varWhat = _v;
+		m.set_var.isByVar = false;
+		m.set_var.valueBy.type = GetType(b);
+		m.set_var.valueBy.SetValue(b);
 
-		_value = b;
-		SetValue(_v.value.value, _value);
-		_v.isSet = true;
+		_value = (T)b;
+		_v.SetValue(_value);
+
+		m.set_var.result = _v.value;
+		ca->Send(m);
 
 		ca->WaitEndOfAnimation();
 		return *this;
 	}
 
+#pragma endregion //SETTERS
+
+#pragma region CHANGE BY VAR
+
 	template <typename S>
-	BasicType<T>& operator+=(BasicType<S>& b)
+	static void SendChangeByMSG(BasicType<T>& a, BasicType<S>& b, ChangeOper co, T result)
 	{
-		CodeAnimation* ca = CodeAnimation::GetInstance();
 		MSG m;
 		m.type = MsgType::OPER_CHANGE_BY;
-		m.oper_change_by.change_type = ChangeOper::INCREASE_BY;
+		m.oper_change_by.change_type = co;
+		m.oper_change_by.varWhat = a._v;
 		m.oper_change_by.isByVar = true;
-		m.oper_change_by.varWhat = _v;
 		m.oper_change_by.varBy = b._v;
 
-		_value += b._value;
-		_v.SetValue(_value);
-		
-		m.oper_change_by
-			.result = _v.value;
+		if (a._v.IsSet() && b._v.IsSet())
+		{
+			m.oper_change_by.result.type = GetType(result);
+			m.oper_change_by.result.SetValue(result);
+		}
+		else
+		{
+			m.oper_change_by.result.type = GetType(result);
+			m.oper_change_by.result.isGarbage = true;
+		}
+
+		CodeAnimation* ca = CodeAnimation::GetInstance();
 		ca->Send(m);
 
 		ca->WaitEndOfAnimation();
+	}
+
+	template <typename S>
+	BasicType<T>& operator+=(BasicType<S>& b)
+	{
+		T result = _value + b._value;
+		SendChangeByMSG(*this, b, ChangeOper::INCREASE_BY, result);
+		value(result, _v.IsSet() && b._v.IsSet());
 		return *this;
 	}
 
 	template <typename S>
 	BasicType<T>& operator-=(BasicType<S>& b)
 	{
-		CodeAnimation* ca = CodeAnimation::GetInstance();
+		T result = _value - b._value;
+		SendChangeByMSG(*this, b, ChangeOper::DECREASE_BY, result);
+		value(result, _v.IsSet() && b._v.IsSet());
+		return *this;
+	}
+
+	template <typename S>
+	BasicType<T>& operator*=(BasicType<S>& b)
+	{
+		T result = _value * b._value;
+		SendChangeByMSG(*this, b, ChangeOper::MULTIPLY_BY, result);
+		value(result, _v.IsSet() && b._v.IsSet());
+		return *this;
+	}
+
+	template <typename S>
+	BasicType<T>& operator/=(BasicType<S>& b)
+	{
+		T result = _value / b._value;
+		SendChangeByMSG(*this, b, ChangeOper::DIVIDE_BY, result);
+		value(result, _v.IsSet() && b._v.IsSet());
+		return *this;
+	}
+
+	template <typename S>
+	BasicType<T>& operator%=(BasicType<S>& b)
+	{
+		T result = _value % b._value;
+		SendChangeByMSG(*this, b, ChangeOper::MODULO_BY, result);
+		value(result, _v.IsSet() && b._v.IsSet());
+		return *this;
+	}
+
+#pragma endregion //CHANGE BY VAR
+
+#pragma region CHANGE BY VALUE
+
+	template <typename S>
+	static void SendChangeByMSG(BasicType<T>& a, S& b, ChangeOper co, T result)
+	{
 		MSG m;
-		m.type = MsgType::OPER_CHANGE_BY_VAR;
-		m.oper_change_var.change_oper = ChangeOper::INCREASE;
-		m.oper_change_var.varWHAT = _v;
-		m.oper_change_var.varBY = b._v;
+		m.type = MsgType::OPER_CHANGE_BY;
+		m.oper_change_by.change_type = co;
+		m.oper_change_by.varWhat = a._v;
+		m.oper_change_by.isByVar = false;
+		m.oper_change_by.valueBy.type = GetType(b);
+		m.oper_change_by.valueBy.SetValue(b);
 
-		_value -= b._value;
-		SetValue(_v.value.value, _value);
+		if (a._v.IsSet())
+		{
+			m.oper_change_by.result.type = GetType(result);
+			m.oper_change_by.result.SetValue(result);
+		}
+		else
+		{
+			m.oper_change_by.result.type = GetType(result);
+			m.oper_change_by.result.isGarbage = true;
+		}
 
-		m.oper_change_var.result = _v.value;
+		CodeAnimation* ca = CodeAnimation::GetInstance();
 		ca->Send(m);
 
 		ca->WaitEndOfAnimation();
-		return *this;
 	}
 
 	template <typename S>
 	BasicType<T>& operator+=(S b)
 	{
-		CodeAnimation* ca = CodeAnimation::GetInstance();
-		MSG m;
-		m.type = MsgType::OPER_CHANGE_BY_VALUE;
-		m.oper_change_value.change_oper = ChangeOper::INCREASE;
-		m.oper_change_value.var = _v;
-		SetValue(m.oper_change_value.value.value, b);
-		m.oper_change_value.value.type = GetType(b);
-
-		_value += b;
-		SetValue(_v.value.value, _value);
-
-		m.oper_change_value.result = _v.value;
-		ca->Send(m);
-
-		ca->WaitEndOfAnimation();
+		T result = _value + b;
+		SendChangeByMSG(*this, b, ChangeOper::INCREASE_BY, result);
+		value(result, _v.IsSet());
 		return *this;
 	}
 
 	template <typename S>
-	BasicType<T>& operator++(S b)
+	BasicType<T>& operator-=(S b)
+	{
+		T result = _value - b;
+		SendChangeByMSG(*this, b, ChangeOper::DECREASE_BY, result);
+		value(result, _v.IsSet());
+		return *this;
+	}
+
+	template <typename S>
+	BasicType<T>& operator*=(S b)
+	{
+		T result = _value * b;
+		SendChangeByMSG(*this, b, ChangeOper::MULTIPLY_BY, result);
+		value(result, _v.IsSet());
+		return *this;
+	}
+
+	template <typename S>
+	BasicType<T>& operator/=(S b)
+	{
+		T result = _value / b;
+		SendChangeByMSG(*this, b, ChangeOper::DIVIDE_BY, result);
+		value(result, _v.IsSet());
+		return *this;
+	}
+
+	template <typename S>
+	BasicType<T>& operator%=(S b)
+	{
+		T result = _value % b;
+		SendChangeByMSG(*this, b, ChangeOper::MODULO_BY, result);
+		value(result, _v.IsSet());
+		return *this;
+	}
+
+	BasicType<T>& operator++()
 	{
 		return (*this)+=1;
 	}
+
+	BasicType<T>& operator++(int)
+	{
+		return (*this) += 1;
+	}
+
+#pragma endregion //CHANGE BY VALUE
 
 #pragma region COMPARE VAR WITH VAR
 

@@ -1,7 +1,7 @@
 #pragma once
 #include<string>
 
-enum class MsgType{ ERROR, QUIT, CREATE_VAR, CREATE_ARR, SET_VAR_VALUE, SET_VAR_VAR, SET_ARR_VALUE, SET_ARR_VAR,
+enum class MsgType{ ERROR, QUIT, CREATE_VAR, CREATE_ARR, SET_VAR, SET_ARR,
 					OPER_IF, OPER_WHILE_START, OPER_WHILE_CHECK, OPER_FOR_START, OPER_FOR_CHECK,
 					OPER_CHANGE_BY, OPER_SIGN, OPER_ARITHMETIC, OPER_COMPARE, OPER_LOGIC };
 
@@ -92,14 +92,14 @@ struct MSG
 		} create_arr;*/
 
 		struct {
-			VariableDescription var;
-			ValueDescription value;
-		} set_var_value;
-
-		struct {
-			VariableDescription varD;
-			VariableDescription varS;
-		} set_var_var;
+			VariableDescription varWhat;
+			bool isByVar;
+			union {
+				VariableDescription varBy;
+				ValueDescription valueBy;
+			};
+			ValueDescription result;
+		} set_var;
 
 		/*struct {
 			DataType dataType = DataType::UNDEFINED;

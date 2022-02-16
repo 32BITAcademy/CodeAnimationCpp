@@ -49,10 +49,8 @@ MSG::MSG(const MSG& m) {
 	case MsgType::CREATE_VAR: create_var = m.create_var; break;
 		//case MsgType::CREATE_ARR: create_arr = m.create_arr; break;
 
-	case MsgType::SET_VAR_VALUE: set_var_value = m.set_var_value; break;
-	case MsgType::SET_VAR_VAR: set_var_var = m.set_var_var; break;
-		//case MsgType::SET_ARR_VALUE: set_arr_value = m.set_arr_value; break;
-		//case MsgType::SET_ARR_VAR: set_arr_var = m.set_arr_var; break;
+	case MsgType::SET_VAR: set_var = m.set_var; break;
+		//case MsgType::SET_ARR: set_arr = m.set_arr; break;
 
 	case MsgType::OPER_IF: oper_if = m.oper_if; break;
 	case MsgType::OPER_WHILE_START: break;
@@ -61,7 +59,10 @@ MSG::MSG(const MSG& m) {
 	case MsgType::OPER_FOR_CHECK: oper_for = m.oper_for; break;
 
 	case MsgType::OPER_CHANGE_BY: oper_change_by = m.oper_change_by; break;
+	case MsgType::OPER_SIGN: oper_sign = m.oper_sign; break;
+	case MsgType::OPER_ARITHMETIC: oper_arithm = m.oper_arithm; break;
 	case MsgType::OPER_COMPARE: oper_compare = m.oper_compare; break;
+	case MsgType::OPER_LOGIC: oper_logic = m.oper_logic; break;
 	}
 }
 
@@ -98,12 +99,10 @@ string MSG::DebugString()
 		}
 		break;
 
-	case MsgType::SET_VAR_VAR:
-		s += "Set " + set_var_var.varD.GetFullString() + " value of " + set_var_var.varS.GetFullString();
-		break;
-
-	case MsgType::SET_VAR_VALUE:
-		s += "Set " + set_var_value.var.GetFullString() + " " + set_var_value.value.GetFullString();
+	case MsgType::SET_VAR:
+		s += "Set " + set_var.varWhat.GetFullString() + " " + 
+			((set_var.isByVar) ? ("value of " + set_var.varBy.GetFullString()) : set_var.valueBy.GetFullString())
+			+ ", result is " + set_var.result.GetShortString();
 		break;
 
 	case MsgType::OPER_CHANGE_BY:
@@ -248,8 +247,6 @@ std::string ValueDescription::GetShortString()
 {
 	return "{" + GetValue() + "} (" + CA_NameOf(type) + ")";
 }
-
-
 
 std::string ValueDescription::GetFullString()
 {

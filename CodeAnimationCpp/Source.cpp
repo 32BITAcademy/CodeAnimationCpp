@@ -19,13 +19,6 @@ int main()
 	}
 	cout << "Sum = " << sum << endl;
 
-	sum = 0;
-	For(i, 0, i <= 5, 1)
-	{
-		sum += i;
-	}
-	cout << "Sum = " << sum << endl;
-
 
 	CodeAnimation::Quit();
 	return 0;
