@@ -150,16 +150,24 @@
   <ItemGroup>
     <ClCompile Include="AlgorithmicOperators.cpp" />
     <ClCompile Include="CodeAnimation.cpp" />
+    <ClCompile Include="DataTypes.cpp" />
     <ClCompile Include="MSG.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="TempType.cpp" />
+    <ClCompile Include="Value.cpp" />
+    <ClCompile Include="Variable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlgorithmicOperators.h" />
     <ClInclude Include="BasicTypes.h" />
     <ClInclude Include="CodeAnimation.h" />
     <ClInclude Include="CodeAnimationLibrary.h" />
+    <ClInclude Include="DataTypes.h" />
     <ClInclude Include="MSG.h" />
+    <ClInclude Include="TempType.h" />
     <ClInclude Include="TypeDefines.h" />
+    <ClInclude Include="Value.h" />
+    <ClInclude Include="Variable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

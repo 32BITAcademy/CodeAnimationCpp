@@ -54,10 +54,7 @@ void CodeAnimation::MainCycle()
 				case MsgType::CREATE_VAR:
 					break;
 
-				case MsgType::SET_VAR_VALUE:
-					break;
-
-				case MsgType::SET_VAR_VAR:
+				case MsgType::SET_VAR:
 					break;
 
 				case MsgType::OPER_IF:
@@ -69,10 +66,7 @@ void CodeAnimation::MainCycle()
 				case MsgType::OPER_WHILE_CHECK:
 					break;
 
-				case MsgType::OPER_CHANGE_BY_VALUE:
-					break;
-
-				case MsgType::OPER_CHANGE_BY_VAR:
+				case MsgType::OPER_CHANGE_BY:
 					break;
 
 				case MsgType::OPER_COMPARE:
