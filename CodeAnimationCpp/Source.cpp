@@ -1,12 +1,12 @@
 #include<iostream>
-#include "CodeAnimationLibrary.h"
+#include "CodeAnimation.h"
 
 using namespace std;
 
 int main()
 {
-	CodeAnimation::Init();
-	CodeAnimation::DebugMode();
+	CA_Init();
+	CA_DebugMode();
 
 	Int(sum, i);
 
@@ -20,6 +20,6 @@ int main()
 	cout << "Sum = " << sum << endl;
 
 
-	CodeAnimation::Quit();
+	CA_Quit();
 	return 0;
 }

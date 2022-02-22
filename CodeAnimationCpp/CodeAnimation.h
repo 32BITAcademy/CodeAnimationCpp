@@ -1,35 +1,23 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <list>
-#include "MSG.h"
+#ifndef _CA_LIB_
+#define _CA_LIB_
 
-class CodeAnimation
+#include "CodeAnimationController.h"
+#include "TypeDefines.h"
+#include "AlgorithmicOperators.h"
+
+void CA_Init()
 {
-private:
-	static CodeAnimation* instance;
-	
-	bool debug_on;
-	sf::Thread thread;
-	int win_height, win_width;
-	sf::RenderWindow* win;
-	std::list<MSG> msgs;
-	sf::Mutex mutex;
-	bool animating;
+	ca::CodeAnimationController::Init();
+}
 
-	int code_depth = 0;
-	
-	CodeAnimation();
-	void MainCycle();
+void CA_Quit()
+{
+	ca::CodeAnimationController::Quit();
+}
+void CA_DebugMode()
+{
+	ca::CodeAnimationController::DebugMode();
+}
 
-public:
-	void Send(MSG& m);
-	bool IsAnimating();
-	void WaitEndOfAnimation(int ms = 16);
-
-	~CodeAnimation();
-	static CodeAnimation* GetInstance();
-	static void Init();
-	static void Quit();
-	static void DebugMode(bool on = true);
-};
+#endif

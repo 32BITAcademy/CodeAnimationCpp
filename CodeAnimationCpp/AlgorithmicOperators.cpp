@@ -5,7 +5,7 @@ bool CA_TMP_BOOL_RESULT = false;
 
 void CA_IF(bool result)
 {
-	CodeAnimation* ca = CodeAnimation::GetInstance();
+	CodeAnimationController* ca = CodeAnimationController::GetInstance();
 	MSG m;
 	m.type = MsgType::OPER_IF;
 	m.oper_if.result = result;
@@ -15,7 +15,7 @@ void CA_IF(bool result)
 
 void CA_WHILE_START()
 {
-	CodeAnimation* ca = CodeAnimation::GetInstance();
+	CodeAnimationController* ca = CodeAnimationController::GetInstance();
 	MSG m;
 	m.type = MsgType::OPER_WHILE_START;
 	ca->Send(m);
@@ -24,7 +24,7 @@ void CA_WHILE_START()
 
 bool CA_WHILE_CHECK(bool result)
 {
-	CodeAnimation* ca = CodeAnimation::GetInstance();
+	CodeAnimationController* ca = CodeAnimationController::GetInstance();
 	MSG m;
 	m.type = MsgType::OPER_WHILE_CHECK;
 	m.oper_while.result = result;
@@ -35,7 +35,7 @@ bool CA_WHILE_CHECK(bool result)
 
 void CA_FOR_START()
 {
-	CodeAnimation* ca = CodeAnimation::GetInstance();
+	CodeAnimationController* ca = CodeAnimationController::GetInstance();
 	MSG m;
 	m.type = MsgType::OPER_FOR_START;
 	ca->Send(m);
@@ -44,7 +44,7 @@ void CA_FOR_START()
 
 bool CA_FOR_CHECK(bool result)
 {
-	CodeAnimation* ca = CodeAnimation::GetInstance();
+	CodeAnimationController* ca = CodeAnimationController::GetInstance();
 	MSG m;
 	m.type = MsgType::OPER_FOR_CHECK;
 	m.oper_for.result = result;

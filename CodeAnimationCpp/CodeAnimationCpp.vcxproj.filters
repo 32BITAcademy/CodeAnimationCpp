@@ -18,7 +18,7 @@
     <ClCompile Include="Source.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="CodeAnimation.cpp">
+    <ClCompile Include="CodeAnimationController.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="AlgorithmicOperators.cpp">
@@ -41,7 +41,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CodeAnimation.h">
+    <ClInclude Include="CodeAnimationController.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="MSG.h">
@@ -56,9 +56,6 @@
     <ClInclude Include="TypeDefines.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="CodeAnimationLibrary.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="TempType.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -69,6 +66,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="DataTypes.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeAnimation.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

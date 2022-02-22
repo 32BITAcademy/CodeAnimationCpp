@@ -3,6 +3,49 @@
 
 namespace ca {
 
+	Value::Value()
+	{
+		uv._double = 0;
+		isGarbage = true;
+		type = DataType::UNDEFINED;
+	}
+	Value::Value(const Value& b)
+	{
+		uv = b.uv;
+		type = b.type;
+		isGarbage = b.isGarbage;
+	}
+	Value::Value(int v)
+	{
+		isGarbage = false;
+		type = GetType(v);
+		uv.SetValue(v);
+	}
+	Value::Value(float v)
+	{
+		isGarbage = false;
+		type = GetType(v);
+		uv.SetValue(v);
+	}
+	Value::Value(double v)
+	{
+		isGarbage = false;
+		type = GetType(v);
+		uv.SetValue(v);
+	}
+	Value::Value(bool v)
+	{
+		isGarbage = false;
+		type = GetType(v);
+		uv.SetValue(v);
+	}
+	Value::Value(char v)
+	{
+		isGarbage = false;
+		type = GetType(v);
+		uv.SetValue(v);
+	}
+
 	std::string Value::GetOnlyValue()
 	{
 		if (isGarbage) return "_GARBAGE_";
@@ -17,6 +60,37 @@ namespace ca {
 	std::string Value::GetFullString()
 	{
 		return "value " + GetShortString();
+	}
+
+	void Value::SetValue(Value& b)
+	{
+		switch (b.type)
+		{
+		case DataType::INT: uv.SetValue(b.uv._int); break;
+		case DataType::FLOAT: uv.SetValue(b.uv._float); break;
+		case DataType::DOUBLE: uv.SetValue(b.uv._double); break;
+		case DataType::BOOL: uv.SetValue(b.uv._bool); break;
+		case DataType::CHAR: uv.SetValue(b.uv._char); break;
+		}
+		isGarbage = b.isGarbage;
+	}
+
+	void Value::Copy(Value& b)
+	{
+		type = b.type;
+		isGarbage = b.isGarbage;
+		uv = b.uv;
+	}
+
+	Value& Value::operator=(Value& b)
+	{
+		SetValue(b);
+	}
+
+	template<typename T>
+	Value& Value::operator=(T b)
+	{
+		SetValue(b);
 	}
 
 	template <typename T, typename S>
@@ -83,6 +157,18 @@ namespace ca {
 	bool less(T a, S b)
 	{
 		return a < b;
+	}
+
+	template <typename T, typename S>
+	bool b_and(T a, S b)
+	{
+		return a and b;
+	}
+
+	template <typename T, typename S>
+	bool b_or(T a, S b)
+	{
+		return a or b;
 	}
 
 	Value Value::operator+(Value& b)
@@ -851,446 +937,644 @@ namespace ca {
 	template Value Value::operator/<char>(char b);
 	template Value Value::operator%<char>(char b);
 
-	bool Value::operator==(Value& b)
+	Value Value::operator==(Value& b)
 	{
-		if (isGarbage or b.isGarbage) return false;
+		Value v;
+		v.type = DataType::BOOL;
+		if (isGarbage or b.isGarbage)
+			v.isGarbage = true;
 
 		switch (type)
 		{
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: return equal(uv._int, b.uv._int);
-			case DataType::FLOAT: return equal(uv._int, b.uv._float);
-			case DataType::DOUBLE: return equal(uv._int, b.uv._double);
-			case DataType::BOOL: return equal(uv._int, b.uv._bool);
-			case DataType::CHAR: return equal(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._int, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = equal(uv._int, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = equal(uv._int, b.uv._double);
+			case DataType::BOOL: v.uv._bool = equal(uv._int, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = equal(uv._int, b.uv._char);
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: return equal(uv._float, b.uv._int);
-			case DataType::FLOAT: return equal(uv._float, b.uv._float);
-			case DataType::DOUBLE: return equal(uv._float, b.uv._double);
-			case DataType::BOOL: return equal(uv._float, b.uv._bool);
-			case DataType::CHAR: return equal(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._float, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = equal(uv._float, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = equal(uv._float, b.uv._double);
+			case DataType::BOOL: v.uv._bool = equal(uv._float, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = equal(uv._float, b.uv._char);
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: return equal(uv._double, b.uv._int);
-			case DataType::FLOAT: return equal(uv._double, b.uv._float);
-			case DataType::DOUBLE: return equal(uv._double, b.uv._double);
-			case DataType::BOOL: return equal(uv._double, b.uv._bool);
-			case DataType::CHAR: return equal(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._double, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = equal(uv._double, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = equal(uv._double, b.uv._double);
+			case DataType::BOOL: v.uv._bool = equal(uv._double, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = equal(uv._double, b.uv._char);
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: return equal(uv._bool, b.uv._int);
-			case DataType::FLOAT: return equal(uv._bool, b.uv._float);
-			case DataType::DOUBLE: return equal(uv._bool, b.uv._double);
-			case DataType::BOOL: return equal(uv._bool, b.uv._bool);
-			case DataType::CHAR: return equal(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._bool, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = equal(uv._bool, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = equal(uv._bool, b.uv._double);
+			case DataType::BOOL: v.uv._bool = equal(uv._bool, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = equal(uv._bool, b.uv._char);
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: return equal(uv._char, b.uv._int);
-			case DataType::FLOAT: return equal(uv._char, b.uv._float);
-			case DataType::DOUBLE: return equal(uv._char, b.uv._double);
-			case DataType::BOOL: return equal(uv._char, b.uv._bool);
-			case DataType::CHAR: return equal(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._char, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = equal(uv._char, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = equal(uv._char, b.uv._double);
+			case DataType::BOOL: v.uv._bool = equal(uv._char, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = equal(uv._char, b.uv._char);
 			}
 			break;
 		}
+
+		return v;
 	}
 
-	bool Value::operator!=(Value& b)
+	Value Value::operator!=(Value& b)
 	{
-		if (isGarbage or b.isGarbage) return false;
+		Value v;
+		v.type = DataType::BOOL;
+		if (isGarbage or b.isGarbage)
+			v.isGarbage = true;
 
 		switch (type)
 		{
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: return not_equal(uv._int, b.uv._int);
-			case DataType::FLOAT: return not_equal(uv._int, b.uv._float);
-			case DataType::DOUBLE: return not_equal(uv._int, b.uv._double);
-			case DataType::BOOL: return not_equal(uv._int, b.uv._bool);
-			case DataType::CHAR: return not_equal(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._int, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._int, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._int, b.uv._double);
+			case DataType::BOOL: v.uv._bool = not_equal(uv._int, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = not_equal(uv._int, b.uv._char);
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: return not_equal(uv._float, b.uv._int);
-			case DataType::FLOAT: return not_equal(uv._float, b.uv._float);
-			case DataType::DOUBLE: return not_equal(uv._float, b.uv._double);
-			case DataType::BOOL: return not_equal(uv._float, b.uv._bool);
-			case DataType::CHAR: return not_equal(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._float, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._float, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._float, b.uv._double);
+			case DataType::BOOL: v.uv._bool = not_equal(uv._float, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = not_equal(uv._float, b.uv._char);
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: return not_equal(uv._double, b.uv._int);
-			case DataType::FLOAT: return not_equal(uv._double, b.uv._float);
-			case DataType::DOUBLE: return not_equal(uv._double, b.uv._double);
-			case DataType::BOOL: return not_equal(uv._double, b.uv._bool);
-			case DataType::CHAR: return not_equal(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._double, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._double, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._double, b.uv._double);
+			case DataType::BOOL: v.uv._bool = not_equal(uv._double, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = not_equal(uv._double, b.uv._char);
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: return not_equal(uv._bool, b.uv._int);
-			case DataType::FLOAT: return not_equal(uv._bool, b.uv._float);
-			case DataType::DOUBLE: return not_equal(uv._bool, b.uv._double);
-			case DataType::BOOL: return not_equal(uv._bool, b.uv._bool);
-			case DataType::CHAR: return not_equal(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._bool, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._bool, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._bool, b.uv._double);
+			case DataType::BOOL: v.uv._bool = not_equal(uv._bool, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = not_equal(uv._bool, b.uv._char);
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: return not_equal(uv._char, b.uv._int);
-			case DataType::FLOAT: return not_equal(uv._char, b.uv._float);
-			case DataType::DOUBLE: return not_equal(uv._char, b.uv._double);
-			case DataType::BOOL: return not_equal(uv._char, b.uv._bool);
-			case DataType::CHAR: return not_equal(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._char, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._char, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._char, b.uv._double);
+			case DataType::BOOL: v.uv._bool = not_equal(uv._char, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = not_equal(uv._char, b.uv._char);
 			}
 			break;
 		}
+
+		return v;
 	}
 
-	bool Value::operator>=(Value& b)
+	Value Value::operator>=(Value& b)
 	{
-		if (isGarbage or b.isGarbage) return false;
+		Value v;
+		v.type = DataType::BOOL;
+		if (isGarbage or b.isGarbage)
+			v.isGarbage = true;
 
 		switch (type)
 		{
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_greater(uv._int, b.uv._int);
-			case DataType::FLOAT: return eq_greater(uv._int, b.uv._float);
-			case DataType::DOUBLE: return eq_greater(uv._int, b.uv._double);
-			case DataType::BOOL: return eq_greater(uv._int, b.uv._bool);
-			case DataType::CHAR: return eq_greater(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._int, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._int, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._int, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._int, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._int, b.uv._char);
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_greater(uv._float, b.uv._int);
-			case DataType::FLOAT: return eq_greater(uv._float, b.uv._float);
-			case DataType::DOUBLE: return eq_greater(uv._float, b.uv._double);
-			case DataType::BOOL: return eq_greater(uv._float, b.uv._bool);
-			case DataType::CHAR: return eq_greater(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._float, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._float, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._float, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._float, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._float, b.uv._char);
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_greater(uv._double, b.uv._int);
-			case DataType::FLOAT: return eq_greater(uv._double, b.uv._float);
-			case DataType::DOUBLE: return eq_greater(uv._double, b.uv._double);
-			case DataType::BOOL: return eq_greater(uv._double, b.uv._bool);
-			case DataType::CHAR: return eq_greater(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._double, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._double, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._double, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._double, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._double, b.uv._char);
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_greater(uv._bool, b.uv._int);
-			case DataType::FLOAT: return eq_greater(uv._bool, b.uv._float);
-			case DataType::DOUBLE: return eq_greater(uv._bool, b.uv._double);
-			case DataType::BOOL: return eq_greater(uv._bool, b.uv._bool);
-			case DataType::CHAR: return eq_greater(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._bool, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._bool, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._bool, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._bool, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._bool, b.uv._char);
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_greater(uv._char, b.uv._int);
-			case DataType::FLOAT: return eq_greater(uv._char, b.uv._float);
-			case DataType::DOUBLE: return eq_greater(uv._char, b.uv._double);
-			case DataType::BOOL: return eq_greater(uv._char, b.uv._bool);
-			case DataType::CHAR: return eq_greater(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._char, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._char, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._char, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._char, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._char, b.uv._char);
 			}
 			break;
 		}
+
+		return v;
 	}
 
-	bool Value::operator>(Value& b)
+	Value Value::operator>(Value& b)
 	{
-		if (isGarbage or b.isGarbage) return false;
+		Value v;
+		v.type = DataType::BOOL;
+		if (isGarbage or b.isGarbage)
+			v.isGarbage = true;
 
 		switch (type)
 		{
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: return greater(uv._int, b.uv._int);
-			case DataType::FLOAT: return greater(uv._int, b.uv._float);
-			case DataType::DOUBLE: return greater(uv._int, b.uv._double);
-			case DataType::BOOL: return greater(uv._int, b.uv._bool);
-			case DataType::CHAR: return greater(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._int, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = greater(uv._int, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = greater(uv._int, b.uv._double);
+			case DataType::BOOL: v.uv._bool = greater(uv._int, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = greater(uv._int, b.uv._char);
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: return greater(uv._float, b.uv._int);
-			case DataType::FLOAT: return greater(uv._float, b.uv._float);
-			case DataType::DOUBLE: return greater(uv._float, b.uv._double);
-			case DataType::BOOL: return greater(uv._float, b.uv._bool);
-			case DataType::CHAR: return greater(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._float, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = greater(uv._float, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = greater(uv._float, b.uv._double);
+			case DataType::BOOL: v.uv._bool = greater(uv._float, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = greater(uv._float, b.uv._char);
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: return greater(uv._double, b.uv._int);
-			case DataType::FLOAT: return greater(uv._double, b.uv._float);
-			case DataType::DOUBLE: return greater(uv._double, b.uv._double);
-			case DataType::BOOL: return greater(uv._double, b.uv._bool);
-			case DataType::CHAR: return greater(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._double, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = greater(uv._double, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = greater(uv._double, b.uv._double);
+			case DataType::BOOL: v.uv._bool = greater(uv._double, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = greater(uv._double, b.uv._char);
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: return greater(uv._bool, b.uv._int);
-			case DataType::FLOAT: return greater(uv._bool, b.uv._float);
-			case DataType::DOUBLE: return greater(uv._bool, b.uv._double);
-			case DataType::BOOL: return greater(uv._bool, b.uv._bool);
-			case DataType::CHAR: return greater(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._bool, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = greater(uv._bool, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = greater(uv._bool, b.uv._double);
+			case DataType::BOOL: v.uv._bool = greater(uv._bool, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = greater(uv._bool, b.uv._char);
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: return greater(uv._char, b.uv._int);
-			case DataType::FLOAT: return greater(uv._char, b.uv._float);
-			case DataType::DOUBLE: return greater(uv._char, b.uv._double);
-			case DataType::BOOL: return greater(uv._char, b.uv._bool);
-			case DataType::CHAR: return greater(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._char, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = greater(uv._char, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = greater(uv._char, b.uv._double);
+			case DataType::BOOL: v.uv._bool = greater(uv._char, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = greater(uv._char, b.uv._char);
 			}
 			break;
 		}
+
+		return v;
 	}
 
-	bool Value::operator<=(Value& b)
+	Value Value::operator<=(Value& b)
 	{
-		if (isGarbage or b.isGarbage) return false;
+		Value v;
+		v.type = DataType::BOOL;
+		if (isGarbage or b.isGarbage)
+			v.isGarbage = true;
 
 		switch (type)
 		{
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_less(uv._int, b.uv._int);
-			case DataType::FLOAT: return eq_less(uv._int, b.uv._float);
-			case DataType::DOUBLE: return eq_less(uv._int, b.uv._double);
-			case DataType::BOOL: return eq_less(uv._int, b.uv._bool);
-			case DataType::CHAR: return eq_less(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._int, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._int, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._int, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_less(uv._int, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_less(uv._int, b.uv._char);
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_less(uv._float, b.uv._int);
-			case DataType::FLOAT: return eq_less(uv._float, b.uv._float);
-			case DataType::DOUBLE: return eq_less(uv._float, b.uv._double);
-			case DataType::BOOL: return eq_less(uv._float, b.uv._bool);
-			case DataType::CHAR: return eq_less(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._float, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._float, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._float, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_less(uv._float, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_less(uv._float, b.uv._char);
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_less(uv._double, b.uv._int);
-			case DataType::FLOAT: return eq_less(uv._double, b.uv._float);
-			case DataType::DOUBLE: return eq_less(uv._double, b.uv._double);
-			case DataType::BOOL: return eq_less(uv._double, b.uv._bool);
-			case DataType::CHAR: return eq_less(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._double, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._double, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._double, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_less(uv._double, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_less(uv._double, b.uv._char);
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_less(uv._bool, b.uv._int);
-			case DataType::FLOAT: return eq_less(uv._bool, b.uv._float);
-			case DataType::DOUBLE: return eq_less(uv._bool, b.uv._double);
-			case DataType::BOOL: return eq_less(uv._bool, b.uv._bool);
-			case DataType::CHAR: return eq_less(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._bool, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._bool, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._bool, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_less(uv._bool, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_less(uv._bool, b.uv._char);
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: return eq_less(uv._char, b.uv._int);
-			case DataType::FLOAT: return eq_less(uv._char, b.uv._float);
-			case DataType::DOUBLE: return eq_less(uv._char, b.uv._double);
-			case DataType::BOOL: return eq_less(uv._char, b.uv._bool);
-			case DataType::CHAR: return eq_less(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._char, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._char, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._char, b.uv._double);
+			case DataType::BOOL: v.uv._bool = eq_less(uv._char, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = eq_less(uv._char, b.uv._char);
 			}
 			break;
 		}
+
+		return v;
 	}
 
-	bool Value::operator<(Value& b)
+	Value Value::operator<(Value& b)
 	{
-		if (isGarbage or b.isGarbage) return false;
+		Value v;
+		v.type = DataType::BOOL;
+		if (isGarbage or b.isGarbage)
+			v.isGarbage = true;
 
 		switch (type)
 		{
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: return less(uv._int, b.uv._int);
-			case DataType::FLOAT: return less(uv._int, b.uv._float);
-			case DataType::DOUBLE: return less(uv._int, b.uv._double);
-			case DataType::BOOL: return less(uv._int, b.uv._bool);
-			case DataType::CHAR: return less(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._int, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = less(uv._int, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = less(uv._int, b.uv._double);
+			case DataType::BOOL: v.uv._bool = less(uv._int, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = less(uv._int, b.uv._char);
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: return less(uv._float, b.uv._int);
-			case DataType::FLOAT: return less(uv._float, b.uv._float);
-			case DataType::DOUBLE: return less(uv._float, b.uv._double);
-			case DataType::BOOL: return less(uv._float, b.uv._bool);
-			case DataType::CHAR: return less(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._float, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = less(uv._float, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = less(uv._float, b.uv._double);
+			case DataType::BOOL: v.uv._bool = less(uv._float, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = less(uv._float, b.uv._char);
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: return less(uv._double, b.uv._int);
-			case DataType::FLOAT: return less(uv._double, b.uv._float);
-			case DataType::DOUBLE: return less(uv._double, b.uv._double);
-			case DataType::BOOL: return less(uv._double, b.uv._bool);
-			case DataType::CHAR: return less(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._double, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = less(uv._double, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = less(uv._double, b.uv._double);
+			case DataType::BOOL: v.uv._bool = less(uv._double, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = less(uv._double, b.uv._char);
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: return less(uv._bool, b.uv._int);
-			case DataType::FLOAT: return less(uv._bool, b.uv._float);
-			case DataType::DOUBLE: return less(uv._bool, b.uv._double);
-			case DataType::BOOL: return less(uv._bool, b.uv._bool);
-			case DataType::CHAR: return less(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._bool, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = less(uv._bool, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = less(uv._bool, b.uv._double);
+			case DataType::BOOL: v.uv._bool = less(uv._bool, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = less(uv._bool, b.uv._char);
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: return less(uv._char, b.uv._int);
-			case DataType::FLOAT: return less(uv._char, b.uv._float);
-			case DataType::DOUBLE: return less(uv._char, b.uv._double);
-			case DataType::BOOL: return less(uv._char, b.uv._bool);
-			case DataType::CHAR: return less(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._char, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = less(uv._char, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = less(uv._char, b.uv._double);
+			case DataType::BOOL: v.uv._bool = less(uv._char, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = less(uv._char, b.uv._char);
 			}
 			break;
 		}
+
+		return v;
 	}
 
 	template <typename T>
-	bool Value::operator==(T b)
+	Value Value::operator==(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this == _b;
+		Value v;
+		v.type = DataType::BOOL;
+		v.uv.SetValue(*this == b);
+		return v;
 	}
 
 	template <typename T>
-	bool Value::operator!=(T b)
+	Value Value::operator!=(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this != _b;
+		Value v;
+		v.type = DataType::BOOL;
+		v.uv.SetValue(*this != b);
+		return v;
 	}
 
 	template <typename T>
-	bool Value::operator>=(T b)
+	Value Value::operator>=(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this >= _b;
+		Value v;
+		v.type = DataType::BOOL;
+		v.uv.SetValue(*this >= b);
+		return v;
 	}
 
 	template <typename T>
-	bool Value::operator>(T b)
+	Value Value::operator>(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this > _b;
+		Value v;
+		v.type = DataType::BOOL;
+		v.uv.SetValue(*this > b);
+		return v;
 	}
 
 	template <typename T>
-	bool Value::operator<=(T b)
+	Value Value::operator<=(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this <= _b;
+		Value v;
+		v.type = DataType::BOOL;
+		v.uv.SetValue(*this <= b);
+		return v;
 	}
 
 	template <typename T>
-	bool Value::operator<(T b)
+	Value Value::operator<(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this < _b;
+		Value v;
+		v.type = DataType::BOOL;
+		v.uv.SetValue(*this < b);
+		return v;
 	}
 
-	template bool Value::operator==<int>(int b);
-	template bool Value::operator!=<int>(int b);
-	template bool Value::operator>=<int>(int b);
-	template bool Value::operator> <int>(int b);
-	template bool Value::operator<=<int>(int b);
-	template bool Value::operator< <int>(int b);
+	Value Value::operator!()
+	{
+		Value v;
+		v.type = DataType::BOOL;
+		v.isGarbage = isGarbage;
+		
+		switch (type)
+		{
+		case DataType::INT: v.uv._bool = !uv._int; break;
+		case DataType::FLOAT: v.uv._bool = !uv._float; break;
+		case DataType::DOUBLE: v.uv._bool = !uv._double; break;
+		case DataType::BOOL: v.uv._bool = !uv._bool; break;
+		case DataType::CHAR: v.uv._bool = !uv._char; break;
+		default: v.uv._bool = true;
+		}
+		return v;
+	}
 
-	template bool Value::operator==<float>(float b);
-	template bool Value::operator!=<float>(float b);
-	template bool Value::operator>=<float>(float b);
-	template bool Value::operator> <float>(float b);
-	template bool Value::operator<=<float>(float b);
-	template bool Value::operator< <float>(float b);
+	Value Value::operator&&(Value& b)
+	{
+		Value v;
+		v.isGarbage = isGarbage or b.isGarbage;
+		v.type = DataType::BOOL;
 
-	template bool Value::operator==<double>(double b);
-	template bool Value::operator!=<double>(double b);
-	template bool Value::operator>=<double>(double b);
-	template bool Value::operator> <double>(double b);
-	template bool Value::operator<=<double>(double b);
-	template bool Value::operator< <double>(double b);
+		switch (type)
+		{
+		case DataType::INT:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool =  b_and(uv._int, b.uv._int);
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._int, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._int, b.uv._double);
+			case DataType::BOOL: v.uv._bool =  b_and(uv._int, b.uv._bool);
+			case DataType::CHAR: v.uv._bool =  b_and(uv._int, b.uv._char);
+			}
+			break;
+		case DataType::FLOAT:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool =  b_and(uv._float, b.uv._int);
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._float, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._float, b.uv._double);
+			case DataType::BOOL: v.uv._bool =  b_and(uv._float, b.uv._bool);
+			case DataType::CHAR: v.uv._bool =  b_and(uv._float, b.uv._char);
+			}
+			break;
+		case DataType::DOUBLE:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool =  b_and(uv._double, b.uv._int);
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._double, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._double, b.uv._double);
+			case DataType::BOOL: v.uv._bool =  b_and(uv._double, b.uv._bool);
+			case DataType::CHAR: v.uv._bool =  b_and(uv._double, b.uv._char);
+			}
+			break;
+		case DataType::BOOL:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool =  b_and(uv._bool, b.uv._int);
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._bool, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._bool, b.uv._double);
+			case DataType::BOOL: v.uv._bool =  b_and(uv._bool, b.uv._bool);
+			case DataType::CHAR: v.uv._bool =  b_and(uv._bool, b.uv._char);
+			}
+			break;
+		case DataType::CHAR:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool =  b_and(uv._char, b.uv._int);
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._char, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._char, b.uv._double);
+			case DataType::BOOL: v.uv._bool =  b_and(uv._char, b.uv._bool);
+			case DataType::CHAR: v.uv._bool =  b_and(uv._char, b.uv._char);
+			}
+			break;
+		}
 
-	template bool Value::operator==<bool>(bool b);
-	template bool Value::operator!=<bool>(bool b);
-	template bool Value::operator>=<bool>(bool b);
-	template bool Value::operator> <bool>(bool b);
-	template bool Value::operator<=<bool>(bool b);
-	template bool Value::operator< <bool>(bool b);
+		return v;
+	}
 
-	template bool Value::operator==<char>(char b);
-	template bool Value::operator!=<char>(char b);
-	template bool Value::operator>=<char>(char b);
-	template bool Value::operator> <char>(char b);
-	template bool Value::operator<=<char>(char b);
-	template bool Value::operator< <char>(char b);
+	Value Value::operator||(Value& b)
+	{
+		Value v;
+		v.isGarbage = isGarbage or b.isGarbage;
+		v.type = DataType::BOOL;
+
+		switch (type)
+		{
+		case DataType::INT:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool = b_or(uv._int, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = b_or(uv._int, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._int, b.uv._double);
+			case DataType::BOOL: v.uv._bool = b_or(uv._int, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = b_or(uv._int, b.uv._char);
+			}
+			break;
+		case DataType::FLOAT:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool = b_or(uv._float, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = b_or(uv._float, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._float, b.uv._double);
+			case DataType::BOOL: v.uv._bool = b_or(uv._float, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = b_or(uv._float, b.uv._char);
+			}
+			break;
+		case DataType::DOUBLE:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool = b_or(uv._double, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = b_or(uv._double, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._double, b.uv._double);
+			case DataType::BOOL: v.uv._bool = b_or(uv._double, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = b_or(uv._double, b.uv._char);
+			}
+			break;
+		case DataType::BOOL:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool = b_or(uv._bool, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = b_or(uv._bool, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._bool, b.uv._double);
+			case DataType::BOOL: v.uv._bool = b_or(uv._bool, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = b_or(uv._bool, b.uv._char);
+			}
+			break;
+		case DataType::CHAR:
+			switch (b.type)
+			{
+			case DataType::INT: v.uv._bool = b_or(uv._char, b.uv._int);
+			case DataType::FLOAT: v.uv._bool = b_or(uv._char, b.uv._float);
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._char, b.uv._double);
+			case DataType::BOOL: v.uv._bool = b_or(uv._char, b.uv._bool);
+			case DataType::CHAR: v.uv._bool = b_or(uv._char, b.uv._char);
+			}
+			break;
+		}
+
+		return v;
+	}
+
+	Value Value::operator&&(bool b)
+	{
+		return *this && Value(b);
+	}
+
+	Value Value::operator||(bool b)
+	{
+		return *this || Value(b);
+	}
+
+	Value::operator bool()
+	{
+		if (isGarbage) return false;
+		switch (type)
+		{
+		case DataType::INT: return bool(uv._int); break;
+		case DataType::FLOAT: return bool(uv._float); break;
+		case DataType::DOUBLE: return bool(uv._double); break;
+		case DataType::BOOL: return bool(uv._bool); break;
+		case DataType::CHAR: return bool(uv._char); break;
+		default: return false;
+		}
+	}
+
+	template Value Value::operator==<int>(int b);
+	template Value Value::operator!=<int>(int b);
+	template Value Value::operator>=<int>(int b);
+	template Value Value::operator> <int>(int b);
+	template Value Value::operator<=<int>(int b);
+	template Value Value::operator< <int>(int b);
+
+	template Value Value::operator==<float>(float b);
+	template Value Value::operator!=<float>(float b);
+	template Value Value::operator>=<float>(float b);
+	template Value Value::operator> <float>(float b);
+	template Value Value::operator<=<float>(float b);
+	template Value Value::operator< <float>(float b);
+
+	template Value Value::operator==<double>(double b);
+	template Value Value::operator!=<double>(double b);
+	template Value Value::operator>=<double>(double b);
+	template Value Value::operator> <double>(double b);
+	template Value Value::operator<=<double>(double b);
+	template Value Value::operator< <double>(double b);
+
+	template Value Value::operator==<bool>(bool b);
+	template Value Value::operator!=<bool>(bool b);
+	template Value Value::operator>=<bool>(bool b);
+	template Value Value::operator> <bool>(bool b);
+	template Value Value::operator<=<bool>(bool b);
+	template Value Value::operator< <bool>(bool b);
+
+	template Value Value::operator==<char>(char b);
+	template Value Value::operator!=<char>(char b);
+	template Value Value::operator>=<char>(char b);
+	template Value Value::operator> <char>(char b);
+	template Value Value::operator<=<char>(char b);
+	template Value Value::operator< <char>(char b);
 }

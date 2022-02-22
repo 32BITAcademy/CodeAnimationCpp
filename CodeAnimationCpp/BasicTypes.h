@@ -75,16 +75,15 @@ namespace ca {
 
 #pragma region CONSTRUCTORS
 
-		BasicType(const char* name) : real_value(0) {
+		BasicType(const char* name) : real_value(0), value() {
 			if (std::is_same<T, int>::value) var.value.type = DataType::INT;
 			if (std::is_same<T, float>::value) var.value.type = DataType::FLOAT;
 			if (std::is_same<T, double>::value) var.value.type = DataType::DOUBLE;
 			if (std::is_same<T, bool>::value) var.value.type = DataType::BOOL;
 			if (std::is_same<T, char>::value) var.value.type = DataType::CHAR;
 			strcpy_s(var.name, NAME_LENGTH, name);
-			var.value.isGarbage = true;
 
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			MSG m;
 			m.type = MsgType::CREATE_VAR;
 			m.create_var.var = var;
@@ -104,7 +103,7 @@ namespace ca {
 			real_value = (T)v;
 			var.SetValue(real_value);
 
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			MSG m;
 			m.type = MsgType::CREATE_VAR;
 			m.create_var.var = var;
@@ -134,7 +133,7 @@ namespace ca {
 		template <typename S>
 		BasicType<T>& operator=(BasicType<S>& b)
 		{
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			MSG m;
 			m.type = MsgType::SET_VAR;
 			m.set_var.varWhat = var;
@@ -154,7 +153,7 @@ namespace ca {
 		template <typename S>
 		BasicType<T>& operator=(S b)
 		{
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			MSG m;
 			m.type = MsgType::SET_VAR;
 			m.set_var.varWhat = var;
@@ -197,7 +196,7 @@ namespace ca {
 				m.oper_change_by.result.isGarbage = true;
 			}
 
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			ca->Send(m);
 
 			ca->WaitEndOfAnimation();
@@ -274,7 +273,7 @@ namespace ca {
 				m.oper_change_by.result.isGarbage = true;
 			}
 
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			ca->Send(m);
 
 			ca->WaitEndOfAnimation();
@@ -361,7 +360,7 @@ namespace ca {
 			m.oper_compare.var1 = a.var;
 			m.oper_compare.var2 = b.var;
 
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			ca->Send(m);
 
 			ca->WaitEndOfAnimation();
@@ -432,7 +431,7 @@ namespace ca {
 			m.oper_compare.value1.type = GetType(a);
 			m.oper_compare.var2 = b.var;
 
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			ca->Send(m);
 
 			ca->WaitEndOfAnimation();
@@ -451,7 +450,7 @@ namespace ca {
 			SetValue(m.oper_compare.value2.value, b);
 			m.oper_compare.value2.type = GetType(b);
 
-			CodeAnimation* ca = CodeAnimation::GetInstance();
+			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			ca->Send(m);
 
 			ca->WaitEndOfAnimation();

@@ -3,6 +3,16 @@
 using namespace std;
 
 namespace ca {
+	Variable::Variable(const Variable& v) : value(v.value)
+	{
+		strcpy_s(name, NAME_LENGTH, v.name);
+	}
+
+	Variable::Variable(const char* n, DataType t) : value()
+	{
+		strcpy_s(name, NAME_LENGTH, n);
+		value.type = t;
+	}
 
 	std::string Variable::GetOnlyValue()
 	{
@@ -28,6 +38,18 @@ namespace ca {
 	bool Variable::IsSet()
 	{
 		return !value.isGarbage;
+	}
+
+	Variable& Variable::operator=(Variable& b)
+	{
+		value = b.value;
+		return *this;
+	}
+
+	template<typename T>
+	Variable& Variable::operator=(T b)
+	{
+		value = b;
 	}
 
 	Value Variable::operator+(Variable& b)
@@ -98,86 +120,132 @@ namespace ca {
 		return value % b;
 	}
 
-	bool Variable::operator==(Variable& b)
+	Value Variable::operator==(Variable& b)
 	{
 		return value == b.value;
 	}
-	bool Variable::operator!=(Variable& b)
+	Value Variable::operator!=(Variable& b)
 	{
 		return value != b.value;
 	}
-	bool Variable::operator>=(Variable& b)
+	Value Variable::operator>=(Variable& b)
 	{
 		return value >= b.value;
 	}
-	bool Variable::operator> (Variable& b)
+	Value Variable::operator> (Variable& b)
 	{
 		return value >  b.value;
 	}
-	bool Variable::operator<=(Variable& b)
+	Value Variable::operator<=(Variable& b)
 	{
 		return value <= b.value;
 	}
-	bool Variable::operator< (Variable& b)
+	Value Variable::operator< (Variable& b)
 	{
 		return value <  b.value;
 	}
-
-	bool Variable::operator==(Value& b)
+	
+	Value Variable::operator==(Value& b)
 	{
 		return value == b;
 	}
-	bool Variable::operator!=(Value& b)
+	Value Variable::operator!=(Value& b)
 	{
 		return value != b;
 	}
-	bool Variable::operator>=(Value& b)
+	Value Variable::operator>=(Value& b)
 	{
 		return value >= b;
 	}
-	bool Variable::operator> (Value& b)
+	Value Variable::operator> (Value& b)
 	{
 		return value >  b;
 	}
-	bool Variable::operator<=(Value& b)
+	Value Variable::operator<=(Value& b)
 	{
 		return value <= b;
 	}
-	bool Variable::operator< (Value& b)
+	Value Variable::operator< (Value& b)
 	{
 		return value <  b;
 	}
 
 	template<typename T>
-	bool Variable::operator==(T b)
+	Value Variable::operator==(T b)
 	{
 		return value == b;
 	}
 	template<typename T>
-	bool Variable::operator!=(T b)
+	Value Variable::operator!=(T b)
 	{
 		return value != b;
 	}
 	template<typename T>
-	bool Variable::operator>=(T b)
+	Value Variable::operator>=(T b)
 	{
 		return value >= b;
 	}
 	template<typename T>
-	bool Variable::operator> (T b)
+	Value Variable::operator> (T b)
 	{
 		return value >  b;
 	}
 	template<typename T>
-	bool Variable::operator<=(T b)
+	Value Variable::operator<=(T b)
 	{
 		return value <= b;
 	}
 	template<typename T>
-	bool Variable::operator< (T b)
+	Value Variable::operator< (T b)
 	{
 		return value <  b;
 	}
+
+	Value Variable::operator!()
+	{
+		return !value;
+	}
+
+	Value Variable::operator&&(Variable& b)
+	{
+		return value && b.value;
+	}
+
+	Value Variable::operator||(Variable& b)
+	{
+		return value || b.value;
+	}
+
+	Value Variable::operator&&(Value& b)
+	{
+		return value && b;
+	}
+
+	Value Variable::operator||(Value& b)
+	{
+		return value || b;
+	}
+
+	Value Variable::operator&&(bool b)
+	{
+		return value && b;
+	}
+
+	Value Variable::operator||(bool b)
+	{
+		return value || b;
+	}
+
+	Variable::operator bool()
+	{
+		return bool(value);
+	}
+
+	template Variable& Variable::operator=<int>(int b);
+	template Variable& Variable::operator=<float>(float b);
+	template Variable& Variable::operator=<double>(double b);
+	template Variable& Variable::operator=<bool>(bool b);
+	template Variable& Variable::operator=<char>(char b);
 
 	template Value Variable::operator+<int>(int b);
 	template Value Variable::operator-<int>(int b);
@@ -209,38 +277,40 @@ namespace ca {
 	template Value Variable::operator/<char>(char b);
 	template Value Variable::operator%<char>(char b);
 
-	template bool Variable::operator==<int>(int b);
-	template bool Variable::operator!=<int>(int b);
-	template bool Variable::operator>=<int>(int b);
-	template bool Variable::operator> <int>(int b);
-	template bool Variable::operator<=<int>(int b);
-	template bool Variable::operator< <int>(int b);
+	template Value Variable::operator==<int>(int b);
+	template Value Variable::operator!=<int>(int b);
+	template Value Variable::operator>=<int>(int b);
+	template Value Variable::operator> <int>(int b);
+	template Value Variable::operator<=<int>(int b);
+	template Value Variable::operator< <int>(int b);
 
-	template bool Variable::operator==<float>(float b);
-	template bool Variable::operator!=<float>(float b);
-	template bool Variable::operator>=<float>(float b);
-	template bool Variable::operator> <float>(float b);
-	template bool Variable::operator<=<float>(float b);
-	template bool Variable::operator< <float>(float b);
+	template Value Variable::operator==<float>(float b);
+	template Value Variable::operator!=<float>(float b);
+	template Value Variable::operator>=<float>(float b);
+	template Value Variable::operator> <float>(float b);
+	template Value Variable::operator<=<float>(float b);
+	template Value Variable::operator< <float>(float b);
 
-	template bool Variable::operator==<double>(double b);
-	template bool Variable::operator!=<double>(double b);
-	template bool Variable::operator>=<double>(double b);
-	template bool Variable::operator> <double>(double b);
-	template bool Variable::operator<=<double>(double b);
-	template bool Variable::operator< <double>(double b);
+	template Value Variable::operator==<double>(double b);
+	template Value Variable::operator!=<double>(double b);
+	template Value Variable::operator>=<double>(double b);
+	template Value Variable::operator> <double>(double b);
+	template Value Variable::operator<=<double>(double b);
+	template Value Variable::operator< <double>(double b);
 
-	template bool Variable::operator==<bool>(bool b);
-	template bool Variable::operator!=<bool>(bool b);
-	template bool Variable::operator>=<bool>(bool b);
-	template bool Variable::operator> <bool>(bool b);
-	template bool Variable::operator<=<bool>(bool b);
-	template bool Variable::operator< <bool>(bool b);
+	template Value Variable::operator==<bool>(bool b);
+	template Value Variable::operator!=<bool>(bool b);
+	template Value Variable::operator>=<bool>(bool b);
+	template Value Variable::operator> <bool>(bool b);
+	template Value Variable::operator<=<bool>(bool b);
+	template Value Variable::operator< <bool>(bool b);
 
-	template bool Variable::operator==<char>(char b);
-	template bool Variable::operator!=<char>(char b);
-	template bool Variable::operator>=<char>(char b);
-	template bool Variable::operator> <char>(char b);
-	template bool Variable::operator<=<char>(char b);
-	template bool Variable::operator< <char>(char b);
+	template Value Variable::operator==<char>(char b);
+	template Value Variable::operator!=<char>(char b);
+	template Value Variable::operator>=<char>(char b);
+	template Value Variable::operator> <char>(char b);
+	template Value Variable::operator<=<char>(char b);
+	template Value Variable::operator< <char>(char b);
+
+
 }

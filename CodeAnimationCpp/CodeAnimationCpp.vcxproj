@@ -149,7 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AlgorithmicOperators.cpp" />
-    <ClCompile Include="CodeAnimation.cpp" />
+    <ClCompile Include="CodeAnimationController.cpp" />
     <ClCompile Include="DataTypes.cpp" />
     <ClCompile Include="MSG.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -161,7 +161,7 @@
     <ClInclude Include="AlgorithmicOperators.h" />
     <ClInclude Include="BasicTypes.h" />
     <ClInclude Include="CodeAnimation.h" />
-    <ClInclude Include="CodeAnimationLibrary.h" />
+    <ClInclude Include="CodeAnimationController.h" />
     <ClInclude Include="DataTypes.h" />
     <ClInclude Include="MSG.h" />
     <ClInclude Include="TempType.h" />
