@@ -20,15 +20,21 @@ namespace ca {
 	{
 		MsgType type = MsgType::ERROR;
 		union {
-			struct {
+			struct CR_VAR{
 				Variable var;
 				Value value;
+				
+				CR_VAR& operator=(const CR_VAR& b) {
+					var = b.var;
+					value = b.value;
+					return *this;
+				}
 			} create_var;
 
 			/*struct {
 			} create_arr;*/
 
-			struct {
+			struct SET_VAR{
 				Variable varWhat;
 				bool isByVar;
 				union {
@@ -36,12 +42,22 @@ namespace ca {
 					Value valueBy;
 				};
 				Value result;
+				
+				SET_VAR& operator=(const SET_VAR& b) {
+					varWhat = b.varWhat;
+					isByVar = b.isByVar;
+					if (isByVar)
+						varBy = b.varBy;
+					else
+						valueBy = b.valueBy;
+					return *this;
+				}
 			} set_var;
 
 			/*struct {
 			} set_arr*/
 
-			struct {
+			struct CH_VAR{
 				ChangeOper change_type;
 				Variable varWhat;
 				bool isByVar;
@@ -50,9 +66,21 @@ namespace ca {
 					Value valueBy;
 				};
 				Value result;
+
+				CH_VAR& operator=(const CH_VAR &b) {
+					change_type = b.change_type;
+					varWhat = b.varWhat;
+					result = b.result;
+					isByVar = b.isByVar;
+					if (isByVar)
+						varBy = b.varBy;
+					else
+						valueBy = b.valueBy;
+					return *this;
+				}
 			} oper_change_by;
 
-			struct {
+			struct SI_OPER{
 				SignOper sign_type;
 				bool isVar;
 				union {
@@ -60,9 +88,20 @@ namespace ca {
 					Value value;
 				};
 				Value result;
+
+				SI_OPER& operator=(const SI_OPER &b) {
+					sign_type = b.sign_type;
+					result = b.result;
+					isVar = b.isVar;
+					if (isVar)
+						var = b.var;
+					else
+						value = b.value;
+					return *this;
+				}
 			} oper_sign;
 
-			struct {
+			struct AR_OPER{
 				ArithmeticOper arithm_type;
 				bool is1var;
 				bool is2var;
@@ -75,9 +114,25 @@ namespace ca {
 					Value value2;
 				};
 				Value result;
+
+				AR_OPER& operator=(const AR_OPER &b) {
+					arithm_type = b.arithm_type;
+					result = b.result;
+					is1var = b.is1var;
+					is2var = b.is2var;
+					if (is1var)
+						var1 = b.var1;
+					else
+						value1 = b.value1;
+					if (is2var)
+						var2 = b.var2;
+					else
+						value2 = b.value2;
+					return *this;
+				}
 			} oper_arithm;
 
-			struct {
+			struct LO_OPER{
 				LogicOper logic_type;
 				bool is1var;
 				bool is2var;
@@ -90,9 +145,25 @@ namespace ca {
 					Value value2;
 				};
 				Value result;
+
+				LO_OPER& operator=(const LO_OPER &b) {
+					logic_type = b.logic_type;
+					result = b.result;
+					is1var = b.is1var;
+					is2var = b.is2var;
+					if (is1var)
+						var1 = b.var1;
+					else
+						value1 = b.value1;
+					if (is2var)
+						var2 = b.var2;
+					else
+						value2 = b.value2;
+					return *this;
+				}
 			} oper_logic;
 
-			struct {
+			struct CO_OPER{
 				CompareOper comp_type;
 				bool is1var;
 				bool is2var;
@@ -104,7 +175,23 @@ namespace ca {
 					Variable var2;
 					Value value2;
 				};
-				bool result;
+				Value result;
+
+				CO_OPER& operator=(const CO_OPER &b) {
+					comp_type = b.comp_type;
+					result = b.result;
+					is1var = b.is1var;
+					is2var = b.is2var;
+					if (is1var)
+						var1 = b.var1;
+					else
+						value1 = b.value1;
+					if (is2var)
+						var2 = b.var2;
+					else
+						value2 = b.value2;
+					return *this;
+				}
 			} oper_compare;
 
 			struct {

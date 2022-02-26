@@ -6,20 +6,18 @@ namespace ca {
 
 	template <typename T> class BasicType;
 
-	static void SendChangeByMSG(Variable a, Variable b, ChangeOper co, Value result);
-	static void SendChangeByMSG(Variable a, Value b, ChangeOper co, Value result);
+	void SendChangeByMSG(Variable a, Variable b, ChangeOper co, Value result);
+	void SendChangeByMSG(Variable a, Value b, ChangeOper co, Value result);
 	
-	static void SendAritmeticMSG(Variable a, Variable b, ArithmeticOper ao, Value result);
-	static void SendAritmeticMSG(Value a, Variable b, ArithmeticOper ao, Value result);
-	static void SendAritmeticMSG(Variable a, Value b, ArithmeticOper ao, Value result);
-	static void SendAritmeticMSG(Value a, Value b, ArithmeticOper ao, Value result);
+	void SendAritmeticMSG(Variable a, Variable b, ArithmeticOper ao, Value result);
+	void SendAritmeticMSG(Value a, Variable b, ArithmeticOper ao, Value result);
+	void SendAritmeticMSG(Variable a, Value b, ArithmeticOper ao, Value result);
+	void SendAritmeticMSG(Value a, Value b, ArithmeticOper ao, Value result);
 
-	static void SendCompareMSG(Variable a, Variable b, CompareOper co, Value result);
-	static void SendCompareMSG(Value a, Variable b, CompareOper co, Value result);
-	static void SendCompareMSG(Variable a, Value b, CompareOper co, Value result);
-	static void SendCompareMSG(Value a, Value b, CompareOper co, Value result);
-
-
+	void SendCompareMSG(Variable a, Variable b, CompareOper co, Value result);
+	void SendCompareMSG(Value a, Variable b, CompareOper co, Value result);
+	void SendCompareMSG(Variable a, Value b, CompareOper co, Value result);
+	void SendCompareMSG(Value a, Value b, CompareOper co, Value result);
 
 	template <typename A>
 	std::ostream& operator<<(std::ostream& out, BasicType<A> a)
@@ -34,7 +32,7 @@ namespace ca {
 	{
 		Value res = a == b.var;
 		SendCompareMSG(Value(a), b.var, CompareOper::EQUAL, res);
-		return res;
+		return res.GetBool();
 	}
 
 	template <typename A, typename S>
@@ -42,7 +40,7 @@ namespace ca {
 	{
 		Value res = a != b.var;
 		SendCompareMSG(Value(a), b.var, CompareOper::NOT_EQUAL, res);
-		return res;
+		return res.GetBool();
 	}
 
 	template <typename A, typename S>
@@ -50,7 +48,7 @@ namespace ca {
 	{
 		Value res = a > b.var;
 		SendCompareMSG(Value(a), b.var, CompareOper::GREATER, res);
-		return res;
+		return res.GetBool();
 	}
 
 	template <typename A, typename S>
@@ -58,7 +56,7 @@ namespace ca {
 	{
 		Value res = a >= b.var;
 		SendCompareMSG(Value(a), b.var, CompareOper::EQ_GREATER, res);
-		return res;
+		return res.GetBool();
 	}
 
 	template <typename A, typename S>
@@ -66,7 +64,7 @@ namespace ca {
 	{
 		Value res = a < b.var;
 		SendCompareMSG(Value(a), b.var, CompareOper::LESSER, res);
-		return res;
+		return res.GetBool();
 	}
 
 	template <typename A, typename S>
@@ -74,7 +72,7 @@ namespace ca {
 	{
 		Value res = a <= b.var;
 		SendCompareMSG(Value(a), b.var, CompareOper::EQ_LESSER, res);
-		return res;
+		return res.GetBool();
 	}
 
 #pragma endregion //COMPARE VALUE WITH VAR
@@ -123,6 +121,11 @@ namespace ca {
 		}
 
 		~BasicType() {}
+
+		operator bool()
+		{
+			return var.GetBool();
+		}
 
 #pragma endregion //CONSTRUCTORS
 
@@ -181,7 +184,7 @@ namespace ca {
 		BasicType<T>& operator+=(BasicType<S>& b)
 		{
 			Variable a = var;
-			var += b.var;
+			var = var + b.var;
 			SendChangeByMSG(a, b.var, ChangeOper::INCREASE_BY, var.value);
 			return *this;
 		}
@@ -190,7 +193,7 @@ namespace ca {
 		BasicType<T>& operator-=(BasicType<S>& b)
 		{
 			Variable a = var;
-			var -= b.var;
+			var = var - b.var;
 			SendChangeByMSG(a, b.var, ChangeOper::DECREASE_BY, var.value);
 			return *this;
 		}
@@ -199,7 +202,7 @@ namespace ca {
 		BasicType<T>& operator*=(BasicType<S>& b)
 		{
 			Variable a = var;
-			var *= b.var;
+			var = var * b.var;
 			SendChangeByMSG(a, b.var, ChangeOper::MULTIPLY_BY, var.value);
 			return *this;
 		}
@@ -298,49 +301,49 @@ namespace ca {
 		template <typename S>
 		bool operator==(BasicType<S>& b)
 		{
-			Value res = a.var == b.var;
+			Value res = var == b.var;
 			SendCompareMSG(var, b.var, CompareOper::EQUAL, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
 		bool operator!=(BasicType<S>& b)
 		{
-			Value res = a.var != b.var;
+			Value res = var != b.var;
 			SendCompareMSG(var, b.var, CompareOper::NOT_EQUAL, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
 		bool operator>(BasicType<S>& b)
 		{
-			Value res = a.var > b.var;
+			Value res = var > b.var;
 			SendCompareMSG(var, b.var, CompareOper::GREATER, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
 		bool operator>=(BasicType<S>& b)
 		{
-			Value res = a.var >= b.var;
+			Value res = var >= b.var;
 			SendCompareMSG(var, b.var, CompareOper::EQ_GREATER, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
 		bool operator<(BasicType<S>& b)
 		{
-			Value res = a.var < b.var;
+			Value res = var < b.var;
 			SendCompareMSG(var, b.var, CompareOper::LESSER, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
 		bool operator<=(BasicType<S>& b)
 		{
-			Value res = a.var <= b.var;
+			Value res = var <= b.var;
 			SendCompareMSG(var, b.var, CompareOper::EQ_LESSER, res);
-			return res;
+			return res.GetBool();
 		}
 
 #pragma endregion //COMPARE VAR WITH VAR
@@ -352,7 +355,7 @@ namespace ca {
 		{
 			Value res = var == b;
 			SendCompareMSG(var, Value(b), CompareOper::EQUAL, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
@@ -360,7 +363,7 @@ namespace ca {
 		{
 			Value res = var != b;
 			SendCompareMSG(var, Value(b), CompareOper::NOT_EQUAL, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
@@ -368,7 +371,7 @@ namespace ca {
 		{
 			Value res = var > b;
 			SendCompareMSG(var, Value(b), CompareOper::GREATER, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
@@ -376,7 +379,7 @@ namespace ca {
 		{
 			Value res = var >= b;
 			SendCompareMSG(var, Value(b), CompareOper::EQ_GREATER, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
@@ -384,7 +387,7 @@ namespace ca {
 		{
 			Value res = var < b;
 			SendCompareMSG(var, Value(b), CompareOper::LESSER, res);
-			return res;
+			return res.GetBool();
 		}
 
 		template <typename S>
@@ -392,7 +395,7 @@ namespace ca {
 		{
 			Value res = var <= b;
 			SendCompareMSG(var, Value(b), CompareOper::EQ_LESSER, res);
-			return res;
+			return res.GetBool();
 		}
 
 #pragma endregion //COMPARE VAR WITH VALUE

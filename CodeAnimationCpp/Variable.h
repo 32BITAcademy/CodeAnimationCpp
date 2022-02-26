@@ -103,7 +103,7 @@ namespace ca {
 		Value operator&&(bool b);
 		Value operator||(bool b);
 
-		operator bool();
+		bool GetBool();
 	};
 	
 }

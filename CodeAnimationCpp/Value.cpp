@@ -106,7 +106,7 @@ namespace ca {
 	}
 
 	template <typename T, typename S>
-	auto mul(T a, S b) -> decltype(a* b)
+	auto mul(T a, S b) -> decltype(a * b)
 	{
 		return a * b;
 	}
@@ -118,7 +118,7 @@ namespace ca {
 	}
 
 	template <typename T, typename S>
-	auto mod(T a, S b) -> decltype(a% b)
+	auto mod(T a, S b) -> decltype(a % b)
 	{
 		return a % b;
 	}
@@ -1600,7 +1600,7 @@ namespace ca {
 		return b || a;
 	}
 
-	Value::operator bool()
+	bool Value::GetBool()
 	{
 		if (isGarbage) return false;
 		switch (type)

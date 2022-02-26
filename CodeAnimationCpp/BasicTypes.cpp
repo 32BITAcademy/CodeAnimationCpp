@@ -2,7 +2,7 @@
 
 namespace ca {
 	
-	static void SendChangeByMSG(Variable a, Variable b, ChangeOper co, Value result)
+	void SendChangeByMSG(Variable a, Variable b, ChangeOper co, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_CHANGE_BY;
@@ -18,7 +18,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	static void SendChangeByMSG(Variable a, Value b, ChangeOper co, Value result)
+	void SendChangeByMSG(Variable a, Value b, ChangeOper co, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_CHANGE_BY;
@@ -98,7 +98,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	static void SendCompareMSG(Variable a, Variable b, CompareOper co, Value result)
+	void SendCompareMSG(Variable a, Variable b, CompareOper co, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_COMPARE;
@@ -115,7 +115,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	static void SendCompareMSG(Value a, Variable b, CompareOper co, Value result)
+	void SendCompareMSG(Value a, Variable b, CompareOper co, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_COMPARE;
@@ -132,7 +132,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	static void SendCompareMSG(Variable a, Value b, CompareOper co, Value result)
+	void SendCompareMSG(Variable a, Value b, CompareOper co, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_COMPARE;
@@ -149,7 +149,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	static void SendCompareMSG(Value a, Value b, CompareOper co, Value result)
+	void SendCompareMSG(Value a, Value b, CompareOper co, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_COMPARE;

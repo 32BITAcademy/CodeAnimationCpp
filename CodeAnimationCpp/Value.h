@@ -182,7 +182,7 @@ namespace ca
 		friend Value operator&&(bool a, Value b);
 		friend Value operator||(bool a, Value b);
 
-		operator bool();
+		bool GetBool();
 	};
 	
 

@@ -121,7 +121,7 @@ namespace ca {
 			default: s += "UNKNOWN"; break;
 			}
 			s += ", result is ";
-			s += oper_compare.result ? "TRUE" : "FALSE";
+			s += oper_compare.result.GetBool() ? "TRUE" : "FALSE";
 			break;
 
 		case MsgType::OPER_LOGIC:

@@ -75,6 +75,7 @@ namespace ca {
 	Variable& Variable::operator=(T b)
 	{
 		value = b;
+		return *this;
 	}
 
 	Value Variable::operator+(Variable& b)
@@ -261,9 +262,9 @@ namespace ca {
 		return value || b;
 	}
 
-	Variable::operator bool()
+	bool Variable::GetBool()
 	{
-		return bool(value);
+		return value.GetBool();
 	}
 
 	template Variable& Variable::operator=<int>(int b);
