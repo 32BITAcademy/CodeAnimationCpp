@@ -6,59 +6,74 @@ namespace ca {
 	class TempType
 	{
 	public:
-		Value val;
+		Value value;
 
-		TempType(Value value);
+		TempType(Value v);
 		TempType(const TempType& b);
 
-	private:
-		static void SendArithmeticByMSG(TempType& a, TempType& b, ArithmeticOper ao, Value result);
-		
-		template <typename T>
-		static void SendArithmeticByMSG(TempType& a, BasicType<T>& b, ArithmeticOper ao, Value result);
+		const TempType operator+(TempType& b);
+		const TempType operator-(TempType& b);
+		const TempType operator*(TempType& b);
+		const TempType operator/(TempType& b);
+		const TempType operator%(TempType& b);
 
 		template <typename T>
-		static void SendArithmeticByMSG(TempType& a, T& b, ArithmeticOper ao, Value result);
+		const TempType operator+(T b);
 
 		template <typename T>
-		static void SendArithmeticByMSG(T& a, TempType& b, ArithmeticOper ao, Value result);
-
-	public:
-		TempType operator+(TempType& b);
-		TempType operator-(TempType& b);
-		TempType operator*(TempType& b);
-		TempType operator/(TempType& b);
-		TempType operator%(TempType& b);
+		const TempType operator-(T b);
 
 		template <typename T>
-		TempType operator+(T b);
+		const TempType operator*(T b);
 
 		template <typename T>
-		TempType operator-(T b);
+		const TempType operator/(T b);
 
 		template <typename T>
-		TempType operator*(T b);
+		const TempType operator%(T b);
 
 		template <typename T>
-		TempType operator/(T b);
+		const TempType operator+(BasicType<T>& b);
 
 		template <typename T>
-		TempType operator%(T b);
+		const TempType operator-(BasicType<T>& b);
 
 		template <typename T>
-		friend TempType operator+(T a, TempType& b);
+		const TempType operator*(BasicType<T>& b);
 
 		template <typename T>
-		friend TempType operator-(T a, TempType& b);
+		const TempType operator/(BasicType<T>& b);
 
 		template <typename T>
-		friend TempType operator*(T a, TempType& b);
-
-		template <typename T>
-		friend TempType operator/(T a, TempType& b);
-
-		template <typename T>
-		friend TempType operator%(T a, TempType& b);
+		const TempType operator%(BasicType<T>& b);
 	};
 
-}
+	template <typename T>
+	const TempType operator+(T a, TempType& b);
+
+	template <typename T>
+	const TempType operator-(T a, TempType& b);
+
+	template <typename T>
+	const TempType operator*(T a, TempType& b);
+
+	template <typename T>
+	const TempType operator/(T a, TempType& b);
+
+	template <typename T>
+	const TempType operator%(T a, TempType& b);
+
+	template <typename T>
+	const TempType operator+(BasicType<T>& a, TempType& b);
+
+	template <typename T>
+	const TempType operator-(BasicType<T>& a, TempType& b);
+
+	template <typename T>
+	const TempType operator*(BasicType<T>& a, TempType& b);
+
+	template <typename T>
+	const TempType operator/(BasicType<T>& a, TempType& b);
+
+	template <typename T>
+	const TempType operator%(BasicType<T>& a, TempType& b);

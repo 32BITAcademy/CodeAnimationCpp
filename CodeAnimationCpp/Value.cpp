@@ -865,46 +865,61 @@ namespace ca {
 	template<typename T>
 	Value Value::operator+(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this + _b;
+		return *this + Value(b);
 	}
 
 	template<typename T>
 	Value Value::operator-(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this - _b;
+		return *this - Value(b);
 	}
 
 	template<typename T>
 	Value Value::operator*(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this * _b;
+		return *this * Value(b);
 	}
 
 	template<typename T>
 	Value Value::operator/(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this / _b;
+		return *this / Value(b);
 	}
 
 	template<typename T>
 	Value Value::operator%(T b)
 	{
-		Value _b;
-		_b.type = GetType(b);
-		_b.uv.SetValue(b);
-		return *this % _b;
+		return *this % Value(b);
+	}
+
+	template <typename T>
+	Value operator+(T a, Value b)
+	{
+		return Value(a) + b;
+	}
+
+	template <typename T>
+	Value operator-(T a, Value b)
+	{
+		return Value(a) - b;
+	}
+
+	template <typename T>
+	Value operator*(T a, Value b)
+	{
+		return Value(a) * b;
+	}
+
+	template <typename T>
+	Value operator/(T a, Value b)
+	{
+		return Value(a) / b;
+	}
+
+	template <typename T>
+	Value operator%(T a, Value b)
+	{
+		return Value(a) % b;
 	}
 
 	template Value Value::operator+<int>(int b);
@@ -949,51 +964,51 @@ namespace ca {
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = equal(uv._int, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = equal(uv._int, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = equal(uv._int, b.uv._double);
-			case DataType::BOOL: v.uv._bool = equal(uv._int, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = equal(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._int, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = equal(uv._int, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = equal(uv._int, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = equal(uv._int, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = equal(uv._int, b.uv._char); break;
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = equal(uv._float, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = equal(uv._float, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = equal(uv._float, b.uv._double);
-			case DataType::BOOL: v.uv._bool = equal(uv._float, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = equal(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._float, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = equal(uv._float, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = equal(uv._float, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = equal(uv._float, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = equal(uv._float, b.uv._char); break;
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = equal(uv._double, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = equal(uv._double, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = equal(uv._double, b.uv._double);
-			case DataType::BOOL: v.uv._bool = equal(uv._double, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = equal(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._double, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = equal(uv._double, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = equal(uv._double, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = equal(uv._double, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = equal(uv._double, b.uv._char); break;
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = equal(uv._bool, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = equal(uv._bool, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = equal(uv._bool, b.uv._double);
-			case DataType::BOOL: v.uv._bool = equal(uv._bool, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = equal(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._bool, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = equal(uv._bool, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = equal(uv._bool, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = equal(uv._bool, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = equal(uv._bool, b.uv._char); break;
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = equal(uv._char, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = equal(uv._char, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = equal(uv._char, b.uv._double);
-			case DataType::BOOL: v.uv._bool = equal(uv._char, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = equal(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = equal(uv._char, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = equal(uv._char, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = equal(uv._char, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = equal(uv._char, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = equal(uv._char, b.uv._char); break;
 			}
 			break;
 		}
@@ -1013,51 +1028,51 @@ namespace ca {
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = not_equal(uv._int, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = not_equal(uv._int, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = not_equal(uv._int, b.uv._double);
-			case DataType::BOOL: v.uv._bool = not_equal(uv._int, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = not_equal(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._int, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._int, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._int, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = not_equal(uv._int, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = not_equal(uv._int, b.uv._char); break;
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = not_equal(uv._float, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = not_equal(uv._float, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = not_equal(uv._float, b.uv._double);
-			case DataType::BOOL: v.uv._bool = not_equal(uv._float, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = not_equal(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._float, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._float, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._float, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = not_equal(uv._float, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = not_equal(uv._float, b.uv._char); break;
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = not_equal(uv._double, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = not_equal(uv._double, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = not_equal(uv._double, b.uv._double);
-			case DataType::BOOL: v.uv._bool = not_equal(uv._double, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = not_equal(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._double, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._double, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._double, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = not_equal(uv._double, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = not_equal(uv._double, b.uv._char); break;
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = not_equal(uv._bool, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = not_equal(uv._bool, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = not_equal(uv._bool, b.uv._double);
-			case DataType::BOOL: v.uv._bool = not_equal(uv._bool, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = not_equal(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._bool, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._bool, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._bool, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = not_equal(uv._bool, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = not_equal(uv._bool, b.uv._char); break;
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = not_equal(uv._char, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = not_equal(uv._char, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = not_equal(uv._char, b.uv._double);
-			case DataType::BOOL: v.uv._bool = not_equal(uv._char, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = not_equal(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = not_equal(uv._char, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = not_equal(uv._char, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = not_equal(uv._char, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = not_equal(uv._char, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = not_equal(uv._char, b.uv._char); break;
 			}
 			break;
 		}
@@ -1077,51 +1092,51 @@ namespace ca {
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_greater(uv._int, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_greater(uv._int, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._int, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_greater(uv._int, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_greater(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._int, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._int, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._int, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._int, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._int, b.uv._char); break;
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_greater(uv._float, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_greater(uv._float, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._float, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_greater(uv._float, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_greater(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._float, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._float, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._float, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._float, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._float, b.uv._char); break;
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_greater(uv._double, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_greater(uv._double, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._double, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_greater(uv._double, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_greater(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._double, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._double, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._double, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._double, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._double, b.uv._char); break;
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_greater(uv._bool, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_greater(uv._bool, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._bool, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_greater(uv._bool, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_greater(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._bool, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._bool, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._bool, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._bool, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._bool, b.uv._char); break;
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_greater(uv._char, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_greater(uv._char, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._char, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_greater(uv._char, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_greater(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_greater(uv._char, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_greater(uv._char, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_greater(uv._char, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_greater(uv._char, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_greater(uv._char, b.uv._char); break;
 			}
 			break;
 		}
@@ -1141,51 +1156,51 @@ namespace ca {
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = greater(uv._int, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = greater(uv._int, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = greater(uv._int, b.uv._double);
-			case DataType::BOOL: v.uv._bool = greater(uv._int, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = greater(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._int, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = greater(uv._int, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = greater(uv._int, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = greater(uv._int, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = greater(uv._int, b.uv._char); break;
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = greater(uv._float, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = greater(uv._float, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = greater(uv._float, b.uv._double);
-			case DataType::BOOL: v.uv._bool = greater(uv._float, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = greater(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._float, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = greater(uv._float, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = greater(uv._float, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = greater(uv._float, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = greater(uv._float, b.uv._char); break;
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = greater(uv._double, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = greater(uv._double, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = greater(uv._double, b.uv._double);
-			case DataType::BOOL: v.uv._bool = greater(uv._double, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = greater(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._double, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = greater(uv._double, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = greater(uv._double, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = greater(uv._double, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = greater(uv._double, b.uv._char); break;
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = greater(uv._bool, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = greater(uv._bool, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = greater(uv._bool, b.uv._double);
-			case DataType::BOOL: v.uv._bool = greater(uv._bool, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = greater(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._bool, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = greater(uv._bool, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = greater(uv._bool, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = greater(uv._bool, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = greater(uv._bool, b.uv._char); break;
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = greater(uv._char, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = greater(uv._char, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = greater(uv._char, b.uv._double);
-			case DataType::BOOL: v.uv._bool = greater(uv._char, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = greater(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = greater(uv._char, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = greater(uv._char, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = greater(uv._char, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = greater(uv._char, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = greater(uv._char, b.uv._char); break;
 			}
 			break;
 		}
@@ -1205,51 +1220,51 @@ namespace ca {
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_less(uv._int, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_less(uv._int, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_less(uv._int, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_less(uv._int, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_less(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._int, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._int, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._int, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_less(uv._int, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_less(uv._int, b.uv._char); break;
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_less(uv._float, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_less(uv._float, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_less(uv._float, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_less(uv._float, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_less(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._float, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._float, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._float, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_less(uv._float, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_less(uv._float, b.uv._char); break;
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_less(uv._double, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_less(uv._double, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_less(uv._double, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_less(uv._double, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_less(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._double, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._double, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._double, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_less(uv._double, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_less(uv._double, b.uv._char); break;
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_less(uv._bool, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_less(uv._bool, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_less(uv._bool, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_less(uv._bool, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_less(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._bool, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._bool, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._bool, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_less(uv._bool, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_less(uv._bool, b.uv._char); break;
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = eq_less(uv._char, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = eq_less(uv._char, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = eq_less(uv._char, b.uv._double);
-			case DataType::BOOL: v.uv._bool = eq_less(uv._char, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = eq_less(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = eq_less(uv._char, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = eq_less(uv._char, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = eq_less(uv._char, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = eq_less(uv._char, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = eq_less(uv._char, b.uv._char); break;
 			}
 			break;
 		}
@@ -1269,51 +1284,51 @@ namespace ca {
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = less(uv._int, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = less(uv._int, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = less(uv._int, b.uv._double);
-			case DataType::BOOL: v.uv._bool = less(uv._int, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = less(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._int, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = less(uv._int, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = less(uv._int, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = less(uv._int, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = less(uv._int, b.uv._char); break;
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = less(uv._float, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = less(uv._float, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = less(uv._float, b.uv._double);
-			case DataType::BOOL: v.uv._bool = less(uv._float, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = less(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._float, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = less(uv._float, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = less(uv._float, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = less(uv._float, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = less(uv._float, b.uv._char); break;
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = less(uv._double, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = less(uv._double, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = less(uv._double, b.uv._double);
-			case DataType::BOOL: v.uv._bool = less(uv._double, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = less(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._double, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = less(uv._double, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = less(uv._double, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = less(uv._double, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = less(uv._double, b.uv._char); break;
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = less(uv._bool, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = less(uv._bool, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = less(uv._bool, b.uv._double);
-			case DataType::BOOL: v.uv._bool = less(uv._bool, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = less(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._bool, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = less(uv._bool, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = less(uv._bool, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = less(uv._bool, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = less(uv._bool, b.uv._char); break;
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = less(uv._char, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = less(uv._char, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = less(uv._char, b.uv._double);
-			case DataType::BOOL: v.uv._bool = less(uv._char, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = less(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = less(uv._char, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = less(uv._char, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = less(uv._char, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = less(uv._char, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = less(uv._char, b.uv._char); break;
 			}
 			break;
 		}
@@ -1324,55 +1339,73 @@ namespace ca {
 	template <typename T>
 	Value Value::operator==(T b)
 	{
-		Value v;
-		v.type = DataType::BOOL;
-		v.uv.SetValue(*this == b);
-		return v;
+		return Value(*this == Value(b));
 	}
 
 	template <typename T>
 	Value Value::operator!=(T b)
 	{
-		Value v;
-		v.type = DataType::BOOL;
-		v.uv.SetValue(*this != b);
-		return v;
+		return Value(*this != Value(b));
 	}
 
 	template <typename T>
 	Value Value::operator>=(T b)
 	{
-		Value v;
-		v.type = DataType::BOOL;
-		v.uv.SetValue(*this >= b);
-		return v;
+		return Value(*this >= Value(b));
 	}
 
 	template <typename T>
 	Value Value::operator>(T b)
 	{
-		Value v;
-		v.type = DataType::BOOL;
-		v.uv.SetValue(*this > b);
-		return v;
+		return Value(*this > Value(b));
 	}
 
 	template <typename T>
 	Value Value::operator<=(T b)
 	{
-		Value v;
-		v.type = DataType::BOOL;
-		v.uv.SetValue(*this <= b);
-		return v;
+		return Value(*this <= Value(b));
 	}
 
 	template <typename T>
 	Value Value::operator<(T b)
 	{
-		Value v;
-		v.type = DataType::BOOL;
-		v.uv.SetValue(*this < b);
-		return v;
+		return Value(*this < Value(b));
+	}
+
+	template <typename T>
+	Value operator==(T a, Value b)
+	{
+		return Value(a) == b;
+	}
+
+	template <typename T>
+	Value operator!=(T a, Value b)
+	{
+		return Value(a) != b;
+	}
+
+	template <typename T>
+	Value operator>=(T a, Value b)
+	{
+		return Value(a) >= b;
+	}
+
+	template <typename T>
+	Value operator>(T a, Value b)
+	{
+		return Value(a) > b;
+	}
+
+	template <typename T>
+	Value operator<=(T a, Value b)
+	{
+		return Value(a) <= b;
+	}
+
+	template <typename T>
+	Value operator<(T a, Value b)
+	{
+		return Value(a) < b;
 	}
 
 	Value Value::operator!()
@@ -1404,51 +1437,51 @@ namespace ca {
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool =  b_and(uv._int, b.uv._int);
-			case DataType::FLOAT: v.uv._bool =  b_and(uv._int, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool =  b_and(uv._int, b.uv._double);
-			case DataType::BOOL: v.uv._bool =  b_and(uv._int, b.uv._bool);
-			case DataType::CHAR: v.uv._bool =  b_and(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool =  b_and(uv._int, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._int, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._int, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool =  b_and(uv._int, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool =  b_and(uv._int, b.uv._char); break;
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool =  b_and(uv._float, b.uv._int);
-			case DataType::FLOAT: v.uv._bool =  b_and(uv._float, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool =  b_and(uv._float, b.uv._double);
-			case DataType::BOOL: v.uv._bool =  b_and(uv._float, b.uv._bool);
-			case DataType::CHAR: v.uv._bool =  b_and(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool =  b_and(uv._float, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._float, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._float, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool =  b_and(uv._float, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool =  b_and(uv._float, b.uv._char); break;
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool =  b_and(uv._double, b.uv._int);
-			case DataType::FLOAT: v.uv._bool =  b_and(uv._double, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool =  b_and(uv._double, b.uv._double);
-			case DataType::BOOL: v.uv._bool =  b_and(uv._double, b.uv._bool);
-			case DataType::CHAR: v.uv._bool =  b_and(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool =  b_and(uv._double, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._double, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._double, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool =  b_and(uv._double, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool =  b_and(uv._double, b.uv._char); break;
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool =  b_and(uv._bool, b.uv._int);
-			case DataType::FLOAT: v.uv._bool =  b_and(uv._bool, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool =  b_and(uv._bool, b.uv._double);
-			case DataType::BOOL: v.uv._bool =  b_and(uv._bool, b.uv._bool);
-			case DataType::CHAR: v.uv._bool =  b_and(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool =  b_and(uv._bool, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._bool, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._bool, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool =  b_and(uv._bool, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool =  b_and(uv._bool, b.uv._char); break;
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool =  b_and(uv._char, b.uv._int);
-			case DataType::FLOAT: v.uv._bool =  b_and(uv._char, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool =  b_and(uv._char, b.uv._double);
-			case DataType::BOOL: v.uv._bool =  b_and(uv._char, b.uv._bool);
-			case DataType::CHAR: v.uv._bool =  b_and(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool =  b_and(uv._char, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool =  b_and(uv._char, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool =  b_and(uv._char, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool =  b_and(uv._char, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool =  b_and(uv._char, b.uv._char); break;
 			}
 			break;
 		}
@@ -1467,51 +1500,51 @@ namespace ca {
 		case DataType::INT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = b_or(uv._int, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = b_or(uv._int, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = b_or(uv._int, b.uv._double);
-			case DataType::BOOL: v.uv._bool = b_or(uv._int, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = b_or(uv._int, b.uv._char);
+			case DataType::INT: v.uv._bool = b_or(uv._int, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = b_or(uv._int, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._int, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = b_or(uv._int, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = b_or(uv._int, b.uv._char); break;
 			}
 			break;
 		case DataType::FLOAT:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = b_or(uv._float, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = b_or(uv._float, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = b_or(uv._float, b.uv._double);
-			case DataType::BOOL: v.uv._bool = b_or(uv._float, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = b_or(uv._float, b.uv._char);
+			case DataType::INT: v.uv._bool = b_or(uv._float, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = b_or(uv._float, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._float, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = b_or(uv._float, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = b_or(uv._float, b.uv._char); break;
 			}
 			break;
 		case DataType::DOUBLE:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = b_or(uv._double, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = b_or(uv._double, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = b_or(uv._double, b.uv._double);
-			case DataType::BOOL: v.uv._bool = b_or(uv._double, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = b_or(uv._double, b.uv._char);
+			case DataType::INT: v.uv._bool = b_or(uv._double, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = b_or(uv._double, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._double, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = b_or(uv._double, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = b_or(uv._double, b.uv._char); break;
 			}
 			break;
 		case DataType::BOOL:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = b_or(uv._bool, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = b_or(uv._bool, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = b_or(uv._bool, b.uv._double);
-			case DataType::BOOL: v.uv._bool = b_or(uv._bool, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = b_or(uv._bool, b.uv._char);
+			case DataType::INT: v.uv._bool = b_or(uv._bool, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = b_or(uv._bool, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._bool, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = b_or(uv._bool, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = b_or(uv._bool, b.uv._char); break;
 			}
 			break;
 		case DataType::CHAR:
 			switch (b.type)
 			{
-			case DataType::INT: v.uv._bool = b_or(uv._char, b.uv._int);
-			case DataType::FLOAT: v.uv._bool = b_or(uv._char, b.uv._float);
-			case DataType::DOUBLE: v.uv._bool = b_or(uv._char, b.uv._double);
-			case DataType::BOOL: v.uv._bool = b_or(uv._char, b.uv._bool);
-			case DataType::CHAR: v.uv._bool = b_or(uv._char, b.uv._char);
+			case DataType::INT: v.uv._bool = b_or(uv._char, b.uv._int); break;
+			case DataType::FLOAT: v.uv._bool = b_or(uv._char, b.uv._float); break;
+			case DataType::DOUBLE: v.uv._bool = b_or(uv._char, b.uv._double); break;
+			case DataType::BOOL: v.uv._bool = b_or(uv._char, b.uv._bool); break;
+			case DataType::CHAR: v.uv._bool = b_or(uv._char, b.uv._char); break;
 			}
 			break;
 		}
@@ -1521,12 +1554,50 @@ namespace ca {
 
 	Value Value::operator&&(bool b)
 	{
-		return *this && Value(b);
+		Value v;
+		v.isGarbage = isGarbage;
+		v.type = DataType::BOOL;
+
+		switch (type)
+		{
+		case DataType::INT: v.uv._bool = b_and(uv._int, b); break;
+		case DataType::FLOAT: v.uv._bool = b_and(uv._float, b); break;
+		case DataType::DOUBLE: v.uv._bool = b_and(uv._double, b); break;
+		case DataType::BOOL: v.uv._bool = b_and(uv._bool, b); break;
+		case DataType::CHAR: v.uv._bool = b_and(uv._char, b); break;
+		default: v.uv._bool = false; break;
+		}
+
+		return v;
 	}
 
 	Value Value::operator||(bool b)
 	{
-		return *this || Value(b);
+		Value v;
+		v.isGarbage = isGarbage;
+		v.type = DataType::BOOL;
+
+		switch (type)
+		{
+		case DataType::INT: v.uv._bool = b_or(uv._int, b); break;
+		case DataType::FLOAT: v.uv._bool = b_or(uv._float, b); break;
+		case DataType::DOUBLE: v.uv._bool = b_or(uv._double, b); break;
+		case DataType::BOOL: v.uv._bool = b_or(uv._bool, b); break;
+		case DataType::CHAR: v.uv._bool = b_or(uv._char, b); break;
+		default: v.uv._bool = false; break;
+		}
+
+		return v;
+	}
+
+	Value operator&&(bool a, Value b)
+	{
+		return b && a;
+	}
+
+	Value operator||(bool a, Value b)
+	{
+		return b || a;
 	}
 
 	Value::operator bool()

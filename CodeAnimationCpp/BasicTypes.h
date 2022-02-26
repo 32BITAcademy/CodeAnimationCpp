@@ -6,6 +6,21 @@ namespace ca {
 
 	template <typename T> class BasicType;
 
+	static void SendChangeByMSG(Variable a, Variable b, ChangeOper co, Value result);
+	static void SendChangeByMSG(Variable a, Value b, ChangeOper co, Value result);
+	
+	static void SendAritmeticMSG(Variable a, Variable b, ArithmeticOper ao, Value result);
+	static void SendAritmeticMSG(Value a, Variable b, ArithmeticOper ao, Value result);
+	static void SendAritmeticMSG(Variable a, Value b, ArithmeticOper ao, Value result);
+	static void SendAritmeticMSG(Value a, Value b, ArithmeticOper ao, Value result);
+
+	static void SendCompareMSG(Variable a, Variable b, CompareOper co, Value result);
+	static void SendCompareMSG(Value a, Variable b, CompareOper co, Value result);
+	static void SendCompareMSG(Variable a, Value b, CompareOper co, Value result);
+	static void SendCompareMSG(Value a, Value b, CompareOper co, Value result);
+
+
+
 	template <typename A>
 	std::ostream& operator<<(std::ostream& out, BasicType<A> a)
 	{
@@ -17,48 +32,48 @@ namespace ca {
 	template <typename A, typename S>
 	bool operator==(S a, BasicType<A>& b)
 	{
-		bool res = (a == b.real_value);
-		SendCompareMSG(a, b, CompareOper::EQUAL, res);
+		Value res = a == b.var;
+		SendCompareMSG(Value(a), b.var, CompareOper::EQUAL, res);
 		return res;
 	}
 
 	template <typename A, typename S>
 	bool operator!=(S a, BasicType<A>& b)
 	{
-		bool res = (a != b.real_value);
-		SendCompareMSG(a, b, CompareOper::NOT_EQUAL, res);
+		Value res = a != b.var;
+		SendCompareMSG(Value(a), b.var, CompareOper::NOT_EQUAL, res);
 		return res;
 	}
 
 	template <typename A, typename S>
 	bool operator>(S a, BasicType<A>& b)
 	{
-		bool res = (a > b.real_value);
-		SendCompareMSG(a, b, CompareOper::GREATER, res);
+		Value res = a > b.var;
+		SendCompareMSG(Value(a), b.var, CompareOper::GREATER, res);
 		return res;
 	}
 
 	template <typename A, typename S>
 	bool operator>=(S a, BasicType<A>& b)
 	{
-		bool res = (a >= b.real_value);
-		SendCompareMSG(a, b, CompareOper::EQ_GREATER, res);
+		Value res = a >= b.var;
+		SendCompareMSG(Value(a), b.var, CompareOper::EQ_GREATER, res);
 		return res;
 	}
 
 	template <typename A, typename S>
 	bool operator<(S a, BasicType<A>& b)
 	{
-		bool res = (a < b.real_value);
-		SendCompareMSG(a, b, CompareOper::LESSER, res);
+		Value res = a < b.var;
+		SendCompareMSG(Value(a), b.var, CompareOper::LESSER, res);
 		return res;
 	}
 
 	template <typename A, typename S>
 	bool operator<=(S a, BasicType<A>& b)
 	{
-		bool res = (a <= b.real_value);
-		SendCompareMSG(a, b, CompareOper::EQ_LESSER, res);
+		Value res = a <= b.var;
+		SendCompareMSG(Value(a), b.var, CompareOper::EQ_LESSER, res);
 		return res;
 	}
 
@@ -67,21 +82,16 @@ namespace ca {
 	template <typename T>
 	class BasicType
 	{
+	public:
+
 		T real_value;
 		Variable var;
 
-		BasicType() {}
-	public:
-
 #pragma region CONSTRUCTORS
 
-		BasicType(const char* name) : real_value(0), value() {
-			if (std::is_same<T, int>::value) var.value.type = DataType::INT;
-			if (std::is_same<T, float>::value) var.value.type = DataType::FLOAT;
-			if (std::is_same<T, double>::value) var.value.type = DataType::DOUBLE;
-			if (std::is_same<T, bool>::value) var.value.type = DataType::BOOL;
-			if (std::is_same<T, char>::value) var.value.type = DataType::CHAR;
-			strcpy_s(var.name, NAME_LENGTH, name);
+		BasicType(const char* name) : real_value(T(0)), var(name, GetType(T(0))) {
+			real_value = (T)0;
+			var.value.isGarbage = true;
 
 			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			MSG m;
@@ -93,29 +103,22 @@ namespace ca {
 		}
 
 		template  <typename S>
-		BasicType(const char* name, S v) {
-			if (std::is_same<T, int>::value) var.value.type = DataType::INT;
-			if (std::is_same<T, float>::value) var.value.type = DataType::FLOAT;
-			if (std::is_same<T, double>::value) var.value.type = DataType::DOUBLE;
-			if (std::is_same<T, bool>::value) var.value.type = DataType::BOOL;
-			if (std::is_same<T, char>::value) var.value.type = DataType::CHAR;
+		BasicType(const char* name, S v) : real_value(T(v)), var(name, GetType(T(v))) {
 			strcpy_s(var.name, NAME_LENGTH, name);
 			real_value = (T)v;
-			var.SetValue(real_value);
+			var.value.SetFull(real_value);
 
 			CodeAnimationController* ca = CodeAnimationController::GetInstance();
 			MSG m;
 			m.type = MsgType::CREATE_VAR;
 			m.create_var.var = var;
-			m.create_var.value.SetValue(v);
-			m.create_var.value.type = GetType(v);
+			m.create_var.value.SetFull(v);
 			ca->Send(m);
 
 			ca->WaitEndOfAnimation();
 		}
 
-		BasicType(const BasicType& b) {
-			var = b.var;
+		BasicType(const BasicType& b) : var(b.var) {
 			real_value = b.real_value;
 		}
 
@@ -141,7 +144,7 @@ namespace ca {
 			m.set_var.varBy = b.var;
 
 			real_value = (T)b.real_value;
-			var.SetValue(real_value);
+			var.value = b.var.value;
 
 			m.set_var.result = var.value;
 			ca->Send(m);
@@ -158,8 +161,7 @@ namespace ca {
 			m.type = MsgType::SET_VAR;
 			m.set_var.varWhat = var;
 			m.set_var.isByVar = false;
-			m.set_var.valueBy.type = GetType(b);
-			m.set_var.valueBy.SetValue(b);
+			m.set_var.valueBy.SetFull(b);
 
 			real_value = (T)b;
 			var.SetValue(real_value);
@@ -176,151 +178,96 @@ namespace ca {
 #pragma region CHANGE BY VAR
 
 		template <typename S>
-		static void SendChangeByMSG(BasicType<T>& a, BasicType<S>& b, ChangeOper co, T result)
-		{
-			MSG m;
-			m.type = MsgType::OPER_CHANGE_BY;
-			m.oper_change_by.change_type = co;
-			m.oper_change_by.varWhat = a.var;
-			m.oper_change_by.isByVar = true;
-			m.oper_change_by.varBy = b.var;
-
-			if (a.var.IsSet() && b.var.IsSet())
-			{
-				m.oper_change_by.result.type = GetType(result);
-				m.oper_change_by.result.SetValue(result);
-			}
-			else
-			{
-				m.oper_change_by.result.type = GetType(result);
-				m.oper_change_by.result.isGarbage = true;
-			}
-
-			CodeAnimationController* ca = CodeAnimationController::GetInstance();
-			ca->Send(m);
-
-			ca->WaitEndOfAnimation();
-		}
-
-		template <typename S>
 		BasicType<T>& operator+=(BasicType<S>& b)
 		{
-			T result = real_value + b.real_value;
-			SendChangeByMSG(*this, b, ChangeOper::INCREASE_BY, result);
-			value(result, var.IsSet() && b.var.IsSet());
+			Variable a = var;
+			var += b.var;
+			SendChangeByMSG(a, b.var, ChangeOper::INCREASE_BY, var.value);
 			return *this;
 		}
 
 		template <typename S>
 		BasicType<T>& operator-=(BasicType<S>& b)
 		{
-			T result = real_value - b.real_value;
-			SendChangeByMSG(*this, b, ChangeOper::DECREASE_BY, result);
-			value(result, var.IsSet() && b.var.IsSet());
+			Variable a = var;
+			var -= b.var;
+			SendChangeByMSG(a, b.var, ChangeOper::DECREASE_BY, var.value);
 			return *this;
 		}
 
 		template <typename S>
 		BasicType<T>& operator*=(BasicType<S>& b)
 		{
-			T result = real_value * b.real_value;
-			SendChangeByMSG(*this, b, ChangeOper::MULTIPLY_BY, result);
-			value(result, var.IsSet() && b.var.IsSet());
+			Variable a = var;
+			var *= b.var;
+			SendChangeByMSG(a, b.var, ChangeOper::MULTIPLY_BY, var.value);
 			return *this;
 		}
 
 		template <typename S>
 		BasicType<T>& operator/=(BasicType<S>& b)
 		{
-			T result = real_value / b.real_value;
-			SendChangeByMSG(*this, b, ChangeOper::DIVIDE_BY, result);
-			value(result, var.IsSet() && b.var.IsSet());
+			Variable a = var;
+			var /= b.var;
+			SendChangeByMSG(a, b.var, ChangeOper::DIVIDE_BY, var.value);
 			return *this;
 		}
 
 		template <typename S>
 		BasicType<T>& operator%=(BasicType<S>& b)
 		{
-			T result = real_value % b.real_value;
-			SendChangeByMSG(*this, b, ChangeOper::MODULO_BY, result);
-			value(result, var.IsSet() && b.var.IsSet());
+			Variable a = var;
+			var %= b.var;
+			SendChangeByMSG(a, b.var, ChangeOper::MODULO_BY, var.value);
 			return *this;
 		}
 
 #pragma endregion //CHANGE BY VAR
 
 #pragma region CHANGE BY VALUE
-
-		template <typename S>
-		static void SendChangeByMSG(BasicType<T>& a, S& b, ChangeOper co, T result)
-		{
-			MSG m;
-			m.type = MsgType::OPER_CHANGE_BY;
-			m.oper_change_by.change_type = co;
-			m.oper_change_by.varWhat = a.var;
-			m.oper_change_by.isByVar = false;
-			m.oper_change_by.valueBy.type = GetType(b);
-			m.oper_change_by.valueBy.SetValue(b);
-
-			if (a.var.IsSet())
-			{
-				m.oper_change_by.result.type = GetType(result);
-				m.oper_change_by.result.SetValue(result);
-			}
-			else
-			{
-				m.oper_change_by.result.type = GetType(result);
-				m.oper_change_by.result.isGarbage = true;
-			}
-
-			CodeAnimationController* ca = CodeAnimationController::GetInstance();
-			ca->Send(m);
-
-			ca->WaitEndOfAnimation();
-		}
-
+		
 		template <typename S>
 		BasicType<T>& operator+=(S b)
 		{
-			T result = real_value + b;
-			SendChangeByMSG(*this, b, ChangeOper::INCREASE_BY, result);
-			value(result, var.IsSet());
+			Variable a = var;
+			var.value = var.value + b;
+			SendChangeByMSG(a, b, ChangeOper::INCREASE_BY, var.value);
 			return *this;
 		}
 
 		template <typename S>
 		BasicType<T>& operator-=(S b)
 		{
-			T result = real_value - b;
-			SendChangeByMSG(*this, b, ChangeOper::DECREASE_BY, result);
-			value(result, var.IsSet());
+			Variable a = var;
+			var.value = var.value - b;
+			SendChangeByMSG(a, b, ChangeOper::DECREASE_BY, var.value);
 			return *this;
 		}
 
 		template <typename S>
 		BasicType<T>& operator*=(S b)
 		{
-			T result = real_value * b;
-			SendChangeByMSG(*this, b, ChangeOper::MULTIPLY_BY, result);
-			value(result, var.IsSet());
+			Variable a = var;
+			var.value = var.value * b;
+			SendChangeByMSG(a, b, ChangeOper::MULTIPLY_BY, var.value);
 			return *this;
 		}
 
 		template <typename S>
 		BasicType<T>& operator/=(S b)
 		{
-			T result = real_value / b;
-			SendChangeByMSG(*this, b, ChangeOper::DIVIDE_BY, result);
-			value(result, var.IsSet());
+			Variable a = var;
+			var.value = var.value / b;
+			SendChangeByMSG(a, b, ChangeOper::DIVIDE_BY, var.value);
 			return *this;
 		}
 
 		template <typename S>
 		BasicType<T>& operator%=(S b)
 		{
-			T result = real_value % b;
-			SendChangeByMSG(*this, b, ChangeOper::MODULO_BY, result);
-			value(result, var.IsSet());
+			Variable a = var;
+			var.value = var.value % b;
+			SendChangeByMSG(a, b, ChangeOper::MODULO_BY, var.value);
 			return *this;
 		}
 
@@ -349,68 +296,50 @@ namespace ca {
 #pragma region COMPARE VAR WITH VAR
 
 		template <typename S>
-		static void SendCompareMSG(BasicType<T>& a, BasicType<S>& b, CompareOper co, bool result)
-		{
-			MSG m;
-			m.type = MsgType::OPER_COMPARE;
-			m.oper_compare.result = result;
-			m.oper_compare.comp_type = co;
-			m.oper_compare.is1var = true;
-			m.oper_compare.is2var = true;
-			m.oper_compare.var1 = a.var;
-			m.oper_compare.var2 = b.var;
-
-			CodeAnimationController* ca = CodeAnimationController::GetInstance();
-			ca->Send(m);
-
-			ca->WaitEndOfAnimation();
-		}
-
-		template <typename S>
 		bool operator==(BasicType<S>& b)
 		{
-			bool res = (real_value == b.real_value);
-			SendCompareMSG(*this, b, CompareOper::EQUAL, res);
+			Value res = a.var == b.var;
+			SendCompareMSG(var, b.var, CompareOper::EQUAL, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator!=(BasicType<S>& b)
 		{
-			bool res = (real_value != b.real_value);
-			SendCompareMSG(*this, b, CompareOper::NOT_EQUAL, res);
+			Value res = a.var != b.var;
+			SendCompareMSG(var, b.var, CompareOper::NOT_EQUAL, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator>(BasicType<S>& b)
 		{
-			bool res = (real_value > b.real_value);
-			SendCompareMSG(*this, b, CompareOper::GREATER, res);
+			Value res = a.var > b.var;
+			SendCompareMSG(var, b.var, CompareOper::GREATER, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator>=(BasicType<S>& b)
 		{
-			bool res = (real_value >= b.real_value);
-			SendCompareMSG(*this, b, CompareOper::EQ_GREATER, res);
+			Value res = a.var >= b.var;
+			SendCompareMSG(var, b.var, CompareOper::EQ_GREATER, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator<(BasicType<S>& b)
 		{
-			bool res = (real_value < b.real_value);
-			SendCompareMSG(*this, b, CompareOper::LESSER, res);
+			Value res = a.var < b.var;
+			SendCompareMSG(var, b.var, CompareOper::LESSER, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator<=(BasicType<S>& b)
 		{
-			bool res = (real_value <= b.real_value);
-			SendCompareMSG(*this, b, CompareOper::EQ_LESSER, res);
+			Value res = a.var <= b.var;
+			SendCompareMSG(var, b.var, CompareOper::EQ_LESSER, res);
 			return res;
 		}
 
@@ -419,88 +348,50 @@ namespace ca {
 #pragma region COMPARE VAR WITH VALUE
 
 		template <typename S>
-		static void SendCompareMSG(S& a, BasicType<T>& b, CompareOper co, bool result)
-		{
-			MSG m;
-			m.type = MsgType::OPER_COMPARE;
-			m.oper_compare.result = result;
-			m.oper_compare.comp_type = co;
-			m.oper_compare.is1var = false;
-			m.oper_compare.is2var = true;
-			SetValue(m.oper_compare.value1.value, a);
-			m.oper_compare.value1.type = GetType(a);
-			m.oper_compare.var2 = b.var;
-
-			CodeAnimationController* ca = CodeAnimationController::GetInstance();
-			ca->Send(m);
-
-			ca->WaitEndOfAnimation();
-		}
-
-		template <typename S>
-		static void SendCompareMSG(BasicType<T>& a, S& b, CompareOper co, bool result)
-		{
-			MSG m;
-			m.type = MsgType::OPER_COMPARE;
-			m.oper_compare.result = result;
-			m.oper_compare.comp_type = co;
-			m.oper_compare.is1var = true;
-			m.oper_compare.is2var = false;
-			m.oper_compare.var1 = a.var;
-			SetValue(m.oper_compare.value2.value, b);
-			m.oper_compare.value2.type = GetType(b);
-
-			CodeAnimationController* ca = CodeAnimationController::GetInstance();
-			ca->Send(m);
-
-			ca->WaitEndOfAnimation();
-		}
-
-		template <typename S>
 		bool operator==(S b)
 		{
-			bool res = (real_value == b);
-			SendCompareMSG(*this, b, CompareOper::EQUAL, res);
+			Value res = var == b;
+			SendCompareMSG(var, Value(b), CompareOper::EQUAL, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator!=(S b)
 		{
-			bool res = (real_value != b);
-			SendCompareMSG(*this, b, CompareOper::NOT_EQUAL, res);
+			Value res = var != b;
+			SendCompareMSG(var, Value(b), CompareOper::NOT_EQUAL, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator>(S b)
 		{
-			bool res = (real_value > b);
-			SendCompareMSG(*this, b, CompareOper::GREATER, res);
+			Value res = var > b;
+			SendCompareMSG(var, Value(b), CompareOper::GREATER, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator>=(S b)
 		{
-			bool res = (real_value >= b);
-			SendCompareMSG(*this, b, CompareOper::EQ_GREATER, res);
+			Value res = var >= b;
+			SendCompareMSG(var, Value(b), CompareOper::EQ_GREATER, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator<(S b)
 		{
-			bool res = (real_value < b);
-			SendCompareMSG(*this, b, CompareOper::LESSER, res);
+			Value res = var < b;
+			SendCompareMSG(var, Value(b), CompareOper::LESSER, res);
 			return res;
 		}
 
 		template <typename S>
 		bool operator<=(S b)
 		{
-			bool res = (real_value <= b);
-			SendCompareMSG(*this, b, CompareOper::EQ_LESSER, res);
+			Value res = var <= b;
+			SendCompareMSG(var, Value(b), CompareOper::EQ_LESSER, res);
 			return res;
 		}
 
@@ -516,7 +407,7 @@ namespace ca {
 
 		template <typename A, typename S>
 		friend bool operator> <T>(S a, BasicType<A>& b);
-
+		
 		template <typename A, typename S>
 		friend bool operator>= <T>(S a, BasicType<A>& b);
 
@@ -528,10 +419,10 @@ namespace ca {
 		
 		template <typename A>
 		friend std::ostream& operator<< <T>(std::ostream& out, BasicType<A> a);
+
 #pragma endregion //FRIENDS
 
 	};
-
 }
 
 // SPECIALIZATIONS

@@ -6,15 +6,17 @@ namespace ca {
 
 	struct Variable
 	{
-	private:
-		Variable();
-
 	public:
 		char name[NAME_LENGTH];
 		Value value;
 
 		Variable(const Variable& v);
 		Variable(const char* n, DataType t);
+		Variable(const char* n, int v);
+		Variable(const char* n, float v);
+		Variable(const char* n, double v);
+		Variable(const char* n, bool v);
+		Variable(const char* n, char v);
 
 		std::string GetOnlyValue();
 		std::string GetShortString();

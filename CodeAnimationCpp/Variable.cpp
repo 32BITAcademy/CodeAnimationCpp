@@ -14,6 +14,31 @@ namespace ca {
 		value.type = t;
 	}
 
+	Variable::Variable(const char* n, int v) : value(v)
+	{
+		strcpy_s(name, NAME_LENGTH, n);
+	}
+
+	Variable::Variable(const char* n, float v) : value(v)
+	{
+		strcpy_s(name, NAME_LENGTH, n);
+	}
+
+	Variable::Variable(const char* n, double v) : value(v)
+	{
+		strcpy_s(name, NAME_LENGTH, n);
+	}
+
+	Variable::Variable(const char* n, bool v) : value(v)
+	{
+		strcpy_s(name, NAME_LENGTH, n);
+	}
+
+	Variable::Variable(const char* n, char v) : value(v)
+	{
+		strcpy_s(name, NAME_LENGTH, n);
+	}
+
 	std::string Variable::GetOnlyValue()
 	{
 		return value.GetOnlyValue();

@@ -4,6 +4,41 @@
 
 namespace ca
 {
+	struct Value;
+
+	template <typename T>
+	Value operator+(T a, Value b);
+
+	template <typename T>
+	Value operator-(T a, Value b);
+
+	template <typename T>
+	Value operator*(T a, Value b);
+
+	template <typename T>
+	Value operator/(T a, Value b);
+
+	template <typename T>
+	Value operator%(T a, Value b);
+
+	template <typename T>
+	Value operator==(T a, Value b);
+
+	template <typename T>
+	Value operator!=(T a, Value b);
+
+	template <typename T>
+	Value operator>=(T a, Value b);
+
+	template <typename T>
+	Value operator>(T a, Value b);
+
+	template <typename T>
+	Value operator<=(T a, Value b);
+
+	template <typename T>
+	Value operator<(T a, Value b);
+
 	struct Value
 	{
 		UniValue uv;
@@ -79,6 +114,21 @@ namespace ca
 		template <typename T>
 		Value operator%(T b);
 
+		template <typename T>
+		friend Value operator+(T a, Value b);
+
+		template <typename T>
+		friend Value operator-(T a, Value b);
+
+		template <typename T>
+		friend Value operator*(T a, Value b);
+
+		template <typename T>
+		friend Value operator/(T a, Value b);
+
+		template <typename T>
+		friend Value operator%(T a, Value b);
+
 		Value operator==(Value& b);
 		Value operator!=(Value& b);
 		Value operator>=(Value& b);
@@ -104,6 +154,24 @@ namespace ca
 		template <typename T>
 		Value operator<(T b);
 
+		template <typename T>
+		friend Value operator==(T a, Value b);
+
+		template <typename T>
+		friend Value operator!=(T a, Value b);
+
+		template <typename T>
+		friend Value operator>=(T a, Value b);
+
+		template <typename T>
+		friend Value operator>(T a, Value b);
+
+		template <typename T>
+		friend Value operator<=(T a, Value b);
+
+		template <typename T>
+		friend Value operator<(T a, Value b);
+
 		Value operator!();
 		Value operator&&(Value& b);
 		Value operator||(Value& b);
@@ -111,7 +179,13 @@ namespace ca
 		Value operator&&(bool b);
 		Value operator||(bool b);
 
+		friend Value operator&&(bool a, Value b);
+		friend Value operator||(bool a, Value b);
+
 		operator bool();
 	};
 	
+
+	Value operator&&(bool a, Value b);
+	Value operator||(bool a, Value b);
 }
