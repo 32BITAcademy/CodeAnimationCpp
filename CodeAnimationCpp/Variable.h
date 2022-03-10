@@ -29,81 +29,42 @@ namespace ca {
 			value.SetValue(v);
 		}
 
-		Variable& operator=(Variable& b);
+		const Variable& operator=(const Variable& b);
+		const Variable& operator=(const Value& b);
 
-		template <typename T>
-		Variable& operator=(T b);
+		Value operator+(const Variable& b);
+		Value operator-(const Variable& b);
+		Value operator*(const Variable& b);
+		Value operator/(const Variable& b);
+		Value operator%(const Variable& b);
 
-		Value operator+(Variable& b);
-		Value operator-(Variable& b);
-		Value operator*(Variable& b);
-		Value operator/(Variable& b);
-		Value operator%(Variable& b);
+		Value operator+(const Value& b);
+		Value operator-(const Value& b);
+		Value operator*(const Value& b);
+		Value operator/(const Value& b);
+		Value operator%(const Value& b);
 
-		Value operator+(Value& b);
-		Value operator-(Value& b);
-		Value operator*(Value& b);
-		Value operator/(Value& b);
-		Value operator%(Value& b);
+		Value operator==(const Variable& b);
+		Value operator!=(const Variable& b);
+		Value operator>=(const Variable& b);
+		Value operator> (const Variable& b);
+		Value operator<=(const Variable& b);
+		Value operator< (const Variable& b);
 
-		template <typename T>
-		Value operator+(T b);
-
-		template <typename T>
-		Value operator-(T b);
-
-		template <typename T>
-		Value operator*(T b);
-
-		template <typename T>
-		Value operator/(T b);
-
-		template <typename T>
-		Value operator%(T b);
-
-		Value operator==(Variable& b);
-		Value operator!=(Variable& b);
-		Value operator>=(Variable& b);
-		Value operator> (Variable& b);
-		Value operator<=(Variable& b);
-		Value operator< (Variable& b);
-
-		Value operator==(Value& b);
-		Value operator!=(Value& b);
-		Value operator>=(Value& b);
-		Value operator> (Value& b);
-		Value operator<=(Value& b);
-		Value operator< (Value& b);
-
-		template <typename T>
-		Value operator==(T b);
-
-		template <typename T>
-		Value operator!=(T b);
-
-		template <typename T>
-		Value operator>=(T b);
-
-		template <typename T>
-		Value operator>(T b);
-
-		template <typename T>
-		Value operator<=(T b);
-
-		template <typename T>
-		Value operator<(T b);
+		Value operator==(const Value& b);
+		Value operator!=(const Value& b);
+		Value operator>=(const Value& b);
+		Value operator> (const Value& b);
+		Value operator<=(const Value& b);
+		Value operator< (const Value& b);
 
 		Value operator!();
-		Value operator&&(Variable& b);
-		Value operator||(Variable& b);
+		Value operator&&(const Variable& b);
+		Value operator||(const Variable& b);
 
-		Value operator&&(Value& b);
-		Value operator||(Value& b);
-
-		Value operator&&(bool b);
-		Value operator||(bool b);
+		Value operator&&(const Value& b);
+		Value operator||(const Value& b);
 
 		bool GetBool();
 	};
-	
 }

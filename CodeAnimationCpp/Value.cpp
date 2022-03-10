@@ -1,4 +1,5 @@
 #include "Value.h"
+#include "Variable.h"
 #include <iostream>
 
 namespace ca {
@@ -62,9 +63,9 @@ namespace ca {
 		return "value " + GetShortString();
 	}
 
-	void Value::SetValue(Value& b)
+	void Value::Set(const Value& b)
 	{
-		switch (b.type)
+		/*switch (b.type)
 		{
 		case DataType::INT: uv.SetValue(b.uv._int); break;
 		case DataType::FLOAT: uv.SetValue(b.uv._float); break;
@@ -72,6 +73,9 @@ namespace ca {
 		case DataType::BOOL: uv.SetValue(b.uv._bool); break;
 		case DataType::CHAR: uv.SetValue(b.uv._char); break;
 		}
+		isGarbage = b.isGarbage;*/
+		uv = b.uv;
+		type = b.type;
 		isGarbage = b.isGarbage;
 	}
 
@@ -82,17 +86,13 @@ namespace ca {
 		uv = b.uv;
 	}
 
-	Value& Value::operator=(Value& b)
+	const Value& Value::operator=(const Value& b)
 	{
-		SetValue(b);
+		Set(b);
+		return *this;
 	}
 
-	template<typename T>
-	Value& Value::operator=(T b)
-	{
-		SetValue(b);
-	}
-
+#pragma region SHORT_FUNCS
 	template <typename T, typename S>
 	auto add(T a, S b) -> decltype(a + b)
 	{
@@ -171,7 +171,9 @@ namespace ca {
 		return a or b;
 	}
 
-	Value Value::operator+(Value& b)
+#pragma endregion //SHORT_FUNCS
+
+	Value Value::operator+(const Value &b)
 	{
 		Value res;
 		res.isGarbage = isGarbage or b.isGarbage;
@@ -304,9 +306,9 @@ namespace ca {
 			}
 			break;
 		}
+		return res;
 	}
-
-	Value Value::operator-(Value& b)
+	Value Value::operator-(const Value &b)
 	{
 		Value res;
 		res.isGarbage = isGarbage or b.isGarbage;
@@ -439,9 +441,9 @@ namespace ca {
 			}
 			break;
 		}
+		return res;
 	}
-	
-	Value Value::operator*(Value& b)
+	Value Value::operator*(const Value &b)
 	{
 		Value res;
 		res.isGarbage = isGarbage or b.isGarbage;
@@ -574,9 +576,9 @@ namespace ca {
 			}
 			break;
 		}
+		return res;
 	}
-
-	Value Value::operator/(Value& b)
+	Value Value::operator/(const Value &b)
 	{
 		Value res;
 		res.isGarbage = isGarbage or b.isGarbage;
@@ -709,9 +711,9 @@ namespace ca {
 			}
 			break;
 		}
+		return res;
 	}
-
-	Value Value::operator%(Value& b)
+	Value Value::operator%(const Value &b)
 	{
 		Value res;
 		res.isGarbage = isGarbage or b.isGarbage;
@@ -860,104 +862,15 @@ namespace ca {
 			}
 			break;
 		}
+		return res;
 	}
 
-	template<typename T>
-	Value Value::operator+(T b)
-	{
-		return *this + Value(b);
-	}
-
-	template<typename T>
-	Value Value::operator-(T b)
-	{
-		return *this - Value(b);
-	}
-
-	template<typename T>
-	Value Value::operator*(T b)
-	{
-		return *this * Value(b);
-	}
-
-	template<typename T>
-	Value Value::operator/(T b)
-	{
-		return *this / Value(b);
-	}
-
-	template<typename T>
-	Value Value::operator%(T b)
-	{
-		return *this % Value(b);
-	}
-
-	template <typename T>
-	Value operator+(T a, Value b)
-	{
-		return Value(a) + b;
-	}
-
-	template <typename T>
-	Value operator-(T a, Value b)
-	{
-		return Value(a) - b;
-	}
-
-	template <typename T>
-	Value operator*(T a, Value b)
-	{
-		return Value(a) * b;
-	}
-
-	template <typename T>
-	Value operator/(T a, Value b)
-	{
-		return Value(a) / b;
-	}
-
-	template <typename T>
-	Value operator%(T a, Value b)
-	{
-		return Value(a) % b;
-	}
-
-	template Value Value::operator+<int>(int b);
-	template Value Value::operator-<int>(int b);
-	template Value Value::operator*<int>(int b);
-	template Value Value::operator/<int>(int b);
-	template Value Value::operator%<int>(int b);
-
-	template Value Value::operator+<float>(float b);
-	template Value Value::operator-<float>(float b);
-	template Value Value::operator*<float>(float b);
-	template Value Value::operator/<float>(float b);
-	template Value Value::operator%<float>(float b);
-
-	template Value Value::operator+<double>(double b);
-	template Value Value::operator-<double>(double b);
-	template Value Value::operator*<double>(double b);
-	template Value Value::operator/<double>(double b);
-	template Value Value::operator%<double>(double b);
-
-	template Value Value::operator+<bool>(bool b);
-	template Value Value::operator-<bool>(bool b);
-	template Value Value::operator*<bool>(bool b);
-	template Value Value::operator/<bool>(bool b);
-	template Value Value::operator%<bool>(bool b);
-
-	template Value Value::operator+<char>(char b);
-	template Value Value::operator-<char>(char b);
-	template Value Value::operator*<char>(char b);
-	template Value Value::operator/<char>(char b);
-	template Value Value::operator%<char>(char b);
-
-	Value Value::operator==(Value& b)
+	Value Value::operator==(const Value &b)
 	{
 		Value v;
 		v.type = DataType::BOOL;
 		if (isGarbage or b.isGarbage)
-			v.isGarbage = true;
+			v.isGarbage = true; else v.isGarbage = false;
 
 		switch (type)
 		{
@@ -1015,13 +928,12 @@ namespace ca {
 
 		return v;
 	}
-
-	Value Value::operator!=(Value& b)
+	Value Value::operator!=(const Value &b)
 	{
 		Value v;
 		v.type = DataType::BOOL;
 		if (isGarbage or b.isGarbage)
-			v.isGarbage = true;
+			v.isGarbage = true; else v.isGarbage = false;
 
 		switch (type)
 		{
@@ -1079,13 +991,12 @@ namespace ca {
 
 		return v;
 	}
-
-	Value Value::operator>=(Value& b)
+	Value Value::operator>=(const Value &b)
 	{
 		Value v;
 		v.type = DataType::BOOL;
 		if (isGarbage or b.isGarbage)
-			v.isGarbage = true;
+			v.isGarbage = true; else v.isGarbage = false;
 
 		switch (type)
 		{
@@ -1143,13 +1054,12 @@ namespace ca {
 
 		return v;
 	}
-
-	Value Value::operator>(Value& b)
+	Value Value::operator>(const Value &b)
 	{
 		Value v;
 		v.type = DataType::BOOL;
 		if (isGarbage or b.isGarbage)
-			v.isGarbage = true;
+			v.isGarbage = true; else v.isGarbage = false;
 
 		switch (type)
 		{
@@ -1207,13 +1117,12 @@ namespace ca {
 
 		return v;
 	}
-
-	Value Value::operator<=(Value& b)
+	Value Value::operator<=(const Value &b)
 	{
 		Value v;
 		v.type = DataType::BOOL;
 		if (isGarbage or b.isGarbage)
-			v.isGarbage = true;
+			v.isGarbage = true; else v.isGarbage = false;
 
 		switch (type)
 		{
@@ -1271,13 +1180,12 @@ namespace ca {
 
 		return v;
 	}
-
-	Value Value::operator<(Value& b)
+	Value Value::operator<(const Value &b)
 	{
 		Value v;
 		v.type = DataType::BOOL;
 		if (isGarbage or b.isGarbage)
-			v.isGarbage = true;
+			v.isGarbage = true; else v.isGarbage = false;
 
 		switch (type)
 		{
@@ -1336,78 +1244,6 @@ namespace ca {
 		return v;
 	}
 
-	template <typename T>
-	Value Value::operator==(T b)
-	{
-		return Value(*this == Value(b));
-	}
-
-	template <typename T>
-	Value Value::operator!=(T b)
-	{
-		return Value(*this != Value(b));
-	}
-
-	template <typename T>
-	Value Value::operator>=(T b)
-	{
-		return Value(*this >= Value(b));
-	}
-
-	template <typename T>
-	Value Value::operator>(T b)
-	{
-		return Value(*this > Value(b));
-	}
-
-	template <typename T>
-	Value Value::operator<=(T b)
-	{
-		return Value(*this <= Value(b));
-	}
-
-	template <typename T>
-	Value Value::operator<(T b)
-	{
-		return Value(*this < Value(b));
-	}
-
-	template <typename T>
-	Value operator==(T a, Value b)
-	{
-		return Value(a) == b;
-	}
-
-	template <typename T>
-	Value operator!=(T a, Value b)
-	{
-		return Value(a) != b;
-	}
-
-	template <typename T>
-	Value operator>=(T a, Value b)
-	{
-		return Value(a) >= b;
-	}
-
-	template <typename T>
-	Value operator>(T a, Value b)
-	{
-		return Value(a) > b;
-	}
-
-	template <typename T>
-	Value operator<=(T a, Value b)
-	{
-		return Value(a) <= b;
-	}
-
-	template <typename T>
-	Value operator<(T a, Value b)
-	{
-		return Value(a) < b;
-	}
-
 	Value Value::operator!()
 	{
 		Value v;
@@ -1425,8 +1261,7 @@ namespace ca {
 		}
 		return v;
 	}
-
-	Value Value::operator&&(Value& b)
+	Value Value::operator&&(const Value &b)
 	{
 		Value v;
 		v.isGarbage = isGarbage or b.isGarbage;
@@ -1488,8 +1323,7 @@ namespace ca {
 
 		return v;
 	}
-
-	Value Value::operator||(Value& b)
+	Value Value::operator||(const Value &b)
 	{
 		Value v;
 		v.isGarbage = isGarbage or b.isGarbage;
@@ -1552,52 +1386,59 @@ namespace ca {
 		return v;
 	}
 
-	Value Value::operator&&(bool b)
+	Value Value::operator+(const Variable &b)
 	{
-		Value v;
-		v.isGarbage = isGarbage;
-		v.type = DataType::BOOL;
-
-		switch (type)
-		{
-		case DataType::INT: v.uv._bool = b_and(uv._int, b); break;
-		case DataType::FLOAT: v.uv._bool = b_and(uv._float, b); break;
-		case DataType::DOUBLE: v.uv._bool = b_and(uv._double, b); break;
-		case DataType::BOOL: v.uv._bool = b_and(uv._bool, b); break;
-		case DataType::CHAR: v.uv._bool = b_and(uv._char, b); break;
-		default: v.uv._bool = false; break;
-		}
-
-		return v;
+		return *this + b.value;
+	}
+	Value Value::operator-(const Variable &b)
+	{
+		return *this - b.value;
+	}
+	Value Value::operator*(const Variable &b)
+	{
+		return *this * b.value;
+	}
+	Value Value::operator/(const Variable &b)
+	{
+		return *this / b.value;
+	}
+	Value Value::operator%(const Variable &b)
+	{
+		return *this % b.value;
 	}
 
-	Value Value::operator||(bool b)
+	Value Value::operator==(const Variable &b)
 	{
-		Value v;
-		v.isGarbage = isGarbage;
-		v.type = DataType::BOOL;
-
-		switch (type)
-		{
-		case DataType::INT: v.uv._bool = b_or(uv._int, b); break;
-		case DataType::FLOAT: v.uv._bool = b_or(uv._float, b); break;
-		case DataType::DOUBLE: v.uv._bool = b_or(uv._double, b); break;
-		case DataType::BOOL: v.uv._bool = b_or(uv._bool, b); break;
-		case DataType::CHAR: v.uv._bool = b_or(uv._char, b); break;
-		default: v.uv._bool = false; break;
-		}
-
-		return v;
+		return *this == b.value;
+	}
+	Value Value::operator!=(const Variable &b)
+	{
+		return *this != b.value;
+	}
+	Value Value::operator>=(const Variable &b)
+	{
+		return *this >= b.value;
+	}
+	Value Value::operator>(const Variable &b)
+	{
+		return *this > b.value;
+	}
+	Value Value::operator<=(const Variable &b)
+	{
+		return *this <= b.value;
+	}
+	Value Value::operator<(const Variable &b)
+	{
+		return *this < b.value;
 	}
 
-	Value operator&&(bool a, Value b)
+	Value Value::operator&&(const Variable &b)
 	{
-		return b && a;
+		return *this && b.value;
 	}
-
-	Value operator||(bool a, Value b)
+	Value Value::operator||(const Variable &b)
 	{
-		return b || a;
+		return *this || b.value;
 	}
 
 	bool Value::GetBool()
@@ -1613,39 +1454,4 @@ namespace ca {
 		default: return false;
 		}
 	}
-
-	template Value Value::operator==<int>(int b);
-	template Value Value::operator!=<int>(int b);
-	template Value Value::operator>=<int>(int b);
-	template Value Value::operator> <int>(int b);
-	template Value Value::operator<=<int>(int b);
-	template Value Value::operator< <int>(int b);
-
-	template Value Value::operator==<float>(float b);
-	template Value Value::operator!=<float>(float b);
-	template Value Value::operator>=<float>(float b);
-	template Value Value::operator> <float>(float b);
-	template Value Value::operator<=<float>(float b);
-	template Value Value::operator< <float>(float b);
-
-	template Value Value::operator==<double>(double b);
-	template Value Value::operator!=<double>(double b);
-	template Value Value::operator>=<double>(double b);
-	template Value Value::operator> <double>(double b);
-	template Value Value::operator<=<double>(double b);
-	template Value Value::operator< <double>(double b);
-
-	template Value Value::operator==<bool>(bool b);
-	template Value Value::operator!=<bool>(bool b);
-	template Value Value::operator>=<bool>(bool b);
-	template Value Value::operator> <bool>(bool b);
-	template Value Value::operator<=<bool>(bool b);
-	template Value Value::operator< <bool>(bool b);
-
-	template Value Value::operator==<char>(char b);
-	template Value Value::operator!=<char>(char b);
-	template Value Value::operator>=<char>(char b);
-	template Value Value::operator> <char>(char b);
-	template Value Value::operator<=<char>(char b);
-	template Value Value::operator< <char>(char b);
 }

@@ -1,5 +1,6 @@
 #include "AlgorithmicOperators.h"
-#include "CodeAnimation.h"
+#include "CodeAnimationController.h"
+#include "MSG.h"
 
 bool CA_TMP_BOOL_RESULT = false;
 

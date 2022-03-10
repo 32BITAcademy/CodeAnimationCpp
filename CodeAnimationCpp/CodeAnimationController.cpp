@@ -1,5 +1,6 @@
 #include "CodeAnimationController.h"
 #include "AlgorithmicOperators.h"
+#include "MSG.h"
 #include <iostream>
 using namespace sf;
 using namespace std;
@@ -101,7 +102,7 @@ namespace ca {
 							code_depth--;
 							for (int i = 0; i < code_depth; i++)
 								cout << "    ";
-							cout << "Cycle For stopped" << endl;
+							cout << "Cycle stopped" << endl;
 						}
 					}
 				}

@@ -2,9 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <list>
-#include "MSG.h"
+
 
 namespace ca {
+	struct MSG;
 
 	class CodeAnimationController
 	{

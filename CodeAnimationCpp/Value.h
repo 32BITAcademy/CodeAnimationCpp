@@ -4,40 +4,7 @@
 
 namespace ca
 {
-	struct Value;
-
-	template <typename T>
-	Value operator+(T a, Value b);
-
-	template <typename T>
-	Value operator-(T a, Value b);
-
-	template <typename T>
-	Value operator*(T a, Value b);
-
-	template <typename T>
-	Value operator/(T a, Value b);
-
-	template <typename T>
-	Value operator%(T a, Value b);
-
-	template <typename T>
-	Value operator==(T a, Value b);
-
-	template <typename T>
-	Value operator!=(T a, Value b);
-
-	template <typename T>
-	Value operator>=(T a, Value b);
-
-	template <typename T>
-	Value operator>(T a, Value b);
-
-	template <typename T>
-	Value operator<=(T a, Value b);
-
-	template <typename T>
-	Value operator<(T a, Value b);
+	struct Variable;
 
 	struct Value
 	{
@@ -57,7 +24,7 @@ namespace ca
 		std::string GetShortString();
 		std::string GetFullString();
 
-		void SetValue(Value& b);
+		void Set(const Value& b);
 
 		template <typename T>
 		void SetValue(T v)
@@ -84,108 +51,46 @@ namespace ca
 		{
 			type = GetType(v);
 			uv.SetValue(v);
+			isGarbage = false;
 		}
 
 		void Copy(Value& b);
 
-		Value& operator=(Value& b);
-		
-		template <typename T>
-		Value& operator=(T b);
+		const Value& operator=(const Value& b);
 
-		Value operator+(Value& b);
-		Value operator-(Value& b);
-		Value operator*(Value& b);
-		Value operator/(Value& b);
-		Value operator%(Value& b);
+		Value operator+(const Value& b);
+		Value operator-(const Value& b);
+		Value operator*(const Value& b);
+		Value operator/(const Value& b);
+		Value operator%(const Value& b);
 
-		template <typename T>
-		Value operator+(T b);
-
-		template <typename T>
-		Value operator-(T b);
-
-		template <typename T>
-		Value operator*(T b);
-
-		template <typename T>
-		Value operator/(T b);
-
-		template <typename T>
-		Value operator%(T b);
-
-		template <typename T>
-		friend Value operator+(T a, Value b);
-
-		template <typename T>
-		friend Value operator-(T a, Value b);
-
-		template <typename T>
-		friend Value operator*(T a, Value b);
-
-		template <typename T>
-		friend Value operator/(T a, Value b);
-
-		template <typename T>
-		friend Value operator%(T a, Value b);
-
-		Value operator==(Value& b);
-		Value operator!=(Value& b);
-		Value operator>=(Value& b);
-		Value operator>(Value& b);
-		Value operator<=(Value& b);
-		Value operator<(Value& b);
-
-		template <typename T>
-		Value operator==(T b);
-
-		template <typename T>
-		Value operator!=(T b);
-
-		template <typename T>
-		Value operator>=(T b);
-
-		template <typename T>
-		Value operator>(T b);
-
-		template <typename T>
-		Value operator<=(T b);
-
-		template <typename T>
-		Value operator<(T b);
-
-		template <typename T>
-		friend Value operator==(T a, Value b);
-
-		template <typename T>
-		friend Value operator!=(T a, Value b);
-
-		template <typename T>
-		friend Value operator>=(T a, Value b);
-
-		template <typename T>
-		friend Value operator>(T a, Value b);
-
-		template <typename T>
-		friend Value operator<=(T a, Value b);
-
-		template <typename T>
-		friend Value operator<(T a, Value b);
+		Value operator==(const Value& b);
+		Value operator!=(const Value& b);
+		Value operator>=(const Value& b);
+		Value operator>(const Value& b);
+		Value operator<=(const Value& b);
+		Value operator<(const Value& b);
 
 		Value operator!();
-		Value operator&&(Value& b);
-		Value operator||(Value& b);
+		Value operator&&(const Value& b);
+		Value operator||(const Value& b);
 
-		Value operator&&(bool b);
-		Value operator||(bool b);
+		Value operator+(const Variable& b);
+		Value operator-(const Variable& b);
+		Value operator*(const Variable& b);
+		Value operator/(const Variable& b);
+		Value operator%(const Variable& b);
 
-		friend Value operator&&(bool a, Value b);
-		friend Value operator||(bool a, Value b);
+		Value operator==(const Variable& b);
+		Value operator!=(const Variable& b);
+		Value operator>=(const Variable& b);
+		Value operator>(const Variable& b);
+		Value operator<=(const Variable& b);
+		Value operator<(const Variable& b);
+
+		Value operator&&(const Variable& b);
+		Value operator||(const Variable& b);
 
 		bool GetBool();
 	};
-	
-
-	Value operator&&(bool a, Value b);
-	Value operator||(bool a, Value b);
 }

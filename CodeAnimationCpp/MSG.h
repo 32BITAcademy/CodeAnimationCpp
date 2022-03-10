@@ -46,6 +46,7 @@ namespace ca {
 				SET_VAR& operator=(const SET_VAR& b) {
 					varWhat = b.varWhat;
 					isByVar = b.isByVar;
+					result = b.result;
 					if (isByVar)
 						varBy = b.varBy;
 					else
