@@ -10,10 +10,10 @@ namespace ca {
 	void SendChangeByMSG(Variable a, Variable b, ChangeOper co, Value result);
 	void SendChangeByMSG(Variable a, Value b, ChangeOper co, Value result);
 	
-	void SendAritmeticMSG(Variable a, Variable b, ArithmeticOper ao, Value result);
-	void SendAritmeticMSG(Value a, Variable b, ArithmeticOper ao, Value result);
-	void SendAritmeticMSG(Variable a, Value b, ArithmeticOper ao, Value result);
-	void SendAritmeticMSG(Value a, Value b, ArithmeticOper ao, Value result);
+	void SendArithmeticMSG(Variable a, Variable b, ArithmeticOper ao, Value result);
+	void SendArithmeticMSG(Value a, Variable b, ArithmeticOper ao, Value result);
+	void SendArithmeticMSG(Variable a, Value b, ArithmeticOper ao, Value result);
+	void SendArithmeticMSG(Value a, Value b, ArithmeticOper ao, Value result);
 
 	void SendCompareMSG(Variable a, Variable b, CompareOper co, Value result);
 	void SendCompareMSG(Value a, Variable b, CompareOper co, Value result);

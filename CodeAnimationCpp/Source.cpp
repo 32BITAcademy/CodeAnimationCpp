@@ -11,11 +11,11 @@ int main()
 	Int(sum, i);
 
 	sum = 0;
-	i = 0;
-	While(i <= 5)
+	i = 5;
+	While(i)
 	{
 		sum += i;
-		i++;
+		i--;
 	}
 	cout << "Sum = " << sum << endl;
 

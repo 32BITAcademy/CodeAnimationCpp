@@ -34,7 +34,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	void SendAritmeticMSG(Variable a, Variable b, ArithmeticOper ao, Value result)
+	void SendArithmeticMSG(Variable a, Variable b, ArithmeticOper ao, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_ARITHMETIC;
@@ -50,7 +50,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	void SendAritmeticMSG(Value a, Variable b, ArithmeticOper ao, Value result)
+	void SendArithmeticMSG(Value a, Variable b, ArithmeticOper ao, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_ARITHMETIC;
@@ -66,7 +66,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	void SendAritmeticMSG(Variable a, Value b, ArithmeticOper ao, Value result)
+	void SendArithmeticMSG(Variable a, Value b, ArithmeticOper ao, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_ARITHMETIC;
@@ -82,7 +82,7 @@ namespace ca {
 		ca->WaitEndOfAnimation();
 	}
 
-	void SendAritmeticMSG(Value a, Value b, ArithmeticOper ao, Value result)
+	void SendArithmeticMSG(Value a, Value b, ArithmeticOper ao, Value result)
 	{
 		MSG m;
 		m.type = MsgType::OPER_ARITHMETIC;
