@@ -19,7 +19,6 @@ int main()
 	}
 	cout << "Sum = " << sum << endl;
 
-
 	CA_Quit();
 	return 0;
 }

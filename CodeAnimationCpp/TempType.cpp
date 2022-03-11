@@ -10,6 +10,8 @@ namespace ca {
 	{
 	}
 
+#pragma region ARITHMETIC TEMP-TEMP
+
 	const TempType TempType::operator+(const TempType& b)
 	{
 		TempType res(value + b.value);
@@ -45,10 +47,14 @@ namespace ca {
 		return res;
 	}
 
+#pragma endregion //ARITHMETIC TEMP-TEMP
+
+#pragma region ARITHMETIC TEMP-BASIC
+
 	template <typename T>
 	const TempType TempType::operator+(const BasicType<T>& b)
 	{
-		TempType res(value + b.var);
+		TempType res(value + b.var.value);
 		SendArithmeticMSG(value, b.var, ArithmeticOper::ADDITION, res.value);
 		return res;
 	}
@@ -56,7 +62,7 @@ namespace ca {
 	template <typename T>
 	const TempType TempType::operator-(const BasicType<T>& b)
 	{
-		TempType res(value - b.var);
+		TempType res(value - b.var.value);
 		SendArithmeticMSG(value, b.var, ArithmeticOper::SUBTRACTION, res.value);
 		return res;
 	}
@@ -64,7 +70,7 @@ namespace ca {
 	template <typename T>
 	const TempType TempType::operator*(const BasicType<T>& b)
 	{
-		TempType res(value * b.var);
+		TempType res(value * b.var.value);
 		SendArithmeticMSG(value, b.var, ArithmeticOper::MULTIPLICATION, res.value);
 		return res;
 	}
@@ -72,7 +78,7 @@ namespace ca {
 	template <typename T>
 	const TempType TempType::operator/(const BasicType<T>& b)
 	{
-		TempType res(value / b.var);
+		TempType res(value / b.var.value);
 		SendArithmeticMSG(value, b.var, ArithmeticOper::DIVISION, res.value);
 		return res;
 	}
@@ -80,10 +86,14 @@ namespace ca {
 	template <typename T>
 	const TempType TempType::operator%(const BasicType<T>& b)
 	{
-		TempType res(value % b.var);
+		TempType res(value % b.var.value);
 		SendArithmeticMSG(value, b.var, ArithmeticOper::MODULO, res.value);
 		return res;
 	}
+
+#pragma endregion //ARITHMETIC TEMP-BASIC
+
+#pragma region ARITHMETIC TEMP-NATIVE
 
 	template <typename T>
 	const TempType TempType::operator+(T b)
@@ -125,7 +135,11 @@ namespace ca {
 		return res;
 	}
 
-	template <typename T>
+#pragma endregion //ARITHMETIC TEMP-NATIVE
+
+#pragma region ARITHMETIC NATIVE-TEMP
+
+	/*template <typename T>
 	const TempType operator+(T a, const TempType& b)
 	{
 		TempType res(a + b.value);
@@ -163,12 +177,16 @@ namespace ca {
 		TempType res(a % b.value);
 		SendArithmeticMSG(Value(a), b.value, ArithmeticOper::MODULO, res.value);
 		return res;
-	}
+	}*/
+
+#pragma endregion //ARITHMETIC NATIVE-TEMP
+
+#pragma region ARITHMETIC BASIC-TEMP
 
 	template <typename T>
 	const TempType operator+(const BasicType<T>& a, const TempType& b)
 	{
-		TempType res(a.var + b.value);
+		TempType res(a.var.value + b.value);
 		SendArithmeticMSG(a.var, b.value, ArithmeticOper::ADDITION, res.value);
 		return res;
 	}
@@ -176,7 +194,7 @@ namespace ca {
 	template <typename T>
 	const TempType operator-(const BasicType<T>& a, const TempType& b)
 	{
-		TempType res(a.var - b.value);
+		TempType res(a.var.value - b.value);
 		SendArithmeticMSG(a.var, b.value, ArithmeticOper::SUBTRACTION, res.value);
 		return res;
 	}
@@ -184,7 +202,7 @@ namespace ca {
 	template <typename T>
 	const TempType operator*(const BasicType<T>& a, const TempType& b)
 	{
-		TempType res(a.var * b.value);
+		TempType res(a.var.value * b.value);
 		SendArithmeticMSG(a.var, b.value, ArithmeticOper::MULTIPLICATION, res.value);
 		return res;
 	}
@@ -192,7 +210,7 @@ namespace ca {
 	template <typename T>
 	const TempType operator/(const BasicType<T>& a, const TempType& b)
 	{
-		TempType res(a.var / b.value);
+		TempType res(a.var.value / b.value);
 		SendArithmeticMSG(a.var, b.value, ArithmeticOper::DIVISION, res.value);
 		return res;
 	}
@@ -200,10 +218,12 @@ namespace ca {
 	template <typename T>
 	const TempType operator%(const BasicType<T>& a, const TempType& b)
 	{
-		TempType res(a.var % b.value);
+		TempType res(a.var.value % b.value);
 		SendArithmeticMSG(a.var, b.value, ArithmeticOper::MODULO, res.value);
 		return res;
 	}
+
+#pragma endregion //ARITHMETIC BASIC-TEMP
 
 	template const TempType TempType::operator+<int>(const BasicType<int>& b);
 	template const TempType TempType::operator-<int>(const BasicType<int>& b);

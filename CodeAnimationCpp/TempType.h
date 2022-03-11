@@ -126,4 +126,15 @@ namespace ca {
 	const TempType operator/(const BasicType<T>& a, const TempType& b);
 	template <typename T>
 	const TempType operator%(const BasicType<T>& a, const TempType& b);
+
+	template <typename T, typename S>
+	const TempType operator+(const BasicType<T>& a, S b);
+	template <typename T, typename S>
+	const TempType operator-(const BasicType<T>& a, S b);
+	template <typename T, typename S>
+	const TempType operator*(const BasicType<T>& a, S b);
+	template <typename T, typename S>
+	const TempType operator/(const BasicType<T>& a, S b);
+	template <typename T, typename S>
+	const TempType operator%(const BasicType<T>& a, S b);
 }

@@ -58,24 +58,22 @@ namespace ca
 
 		const Value& operator=(const Value& b);
 
-		Value operator+(const Value& b);
-		Value operator-(const Value& b);
-		Value operator*(const Value& b);
-		Value operator/(const Value& b);
-		Value operator%(const Value& b);
+		friend const Value operator+ (const Value& a, const Value& b);
+		friend const Value operator- (const Value& a, const Value& b);
+		friend const Value operator* (const Value& a, const Value& b);
+		friend const Value operator/ (const Value& a, const Value& b);
+		friend const Value operator% (const Value& a, const Value& b);
+		friend const Value operator==(const Value& a, const Value& b);
+		friend const Value operator!=(const Value& a, const Value& b);
+		friend const Value operator>=(const Value& a, const Value& b);
+		friend const Value operator> (const Value& a, const Value& b);
+		friend const Value operator<=(const Value& a, const Value& b);
+		friend const Value operator< (const Value& a, const Value& b);
+		friend const Value operator&&(const Value& a, const Value& b);
+		friend const Value operator||(const Value& a, const Value& b);
+		friend const Value operator! (const Value& a);
 
-		Value operator==(const Value& b);
-		Value operator!=(const Value& b);
-		Value operator>=(const Value& b);
-		Value operator>(const Value& b);
-		Value operator<=(const Value& b);
-		Value operator<(const Value& b);
-
-		Value operator!();
-		Value operator&&(const Value& b);
-		Value operator||(const Value& b);
-
-		Value operator+(const Variable& b);
+		/*Value operator+(const Variable& b);
 		Value operator-(const Variable& b);
 		Value operator*(const Variable& b);
 		Value operator/(const Variable& b);
@@ -89,8 +87,23 @@ namespace ca
 		Value operator<(const Variable& b);
 
 		Value operator&&(const Variable& b);
-		Value operator||(const Variable& b);
+		Value operator||(const Variable& b);*/
 
 		bool GetBool();
 	};
+
+	const Value operator+ (const Value& a, const Value& b);
+	const Value operator- (const Value& a, const Value& b);
+	const Value operator* (const Value& a, const Value& b);
+	const Value operator/ (const Value& a, const Value& b);
+	const Value operator% (const Value& a, const Value& b);
+	const Value operator==(const Value& a, const Value& b);
+	const Value operator!=(const Value& a, const Value& b);
+	const Value operator>=(const Value& a, const Value& b);
+	const Value operator> (const Value& a, const Value& b);
+	const Value operator<=(const Value& a, const Value& b);
+	const Value operator< (const Value& a, const Value& b);
+	const Value operator&&(const Value& a, const Value& b);
+	const Value operator||(const Value& a, const Value& b);
+	const Value operator! (const Value& a);
 }

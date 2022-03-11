@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BasicTypes.h"
+#include "TempType.h"
 
 #define FE_CALLITn01(a,b)  a b
 #define FE_CALLITn02(a,b)  a b
