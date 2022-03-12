@@ -6,6 +6,7 @@
 namespace ca {
 
 	template <typename T> class BasicType;
+	class TempType;
 
 	void SendChangeByMSG(Variable a, Variable b, ChangeOper co, Value result);
 	void SendChangeByMSG(Variable a, Value b, ChangeOper co, Value result);
@@ -26,7 +27,7 @@ namespace ca {
 	void SendLogicMSG(Value a, Value b, LogicOper lo, Value result);
 
 	template <typename A>
-	std::ostream& operator<<(std::ostream& out, BasicType<A> a)
+	std::ostream& operator<<(std::ostream& out, const BasicType<A>& a)
 	{
 		return out << a.real_value;
 	}
@@ -183,6 +184,8 @@ namespace ca {
 			ca->WaitEndOfAnimation();
 			return *this;
 		}
+
+		BasicType<T>& operator=(const TempType& b);
 
 #pragma endregion //SETTERS
 
@@ -443,7 +446,7 @@ namespace ca {
 		friend bool operator<= <T>(S a, BasicType<A>& b);
 		
 		template <typename A>
-		friend std::ostream& operator<< <T>(std::ostream& out, BasicType<A> a);
+		friend std::ostream& operator<< <T>(std::ostream& out, const BasicType<A>& a);
 
 #pragma endregion //FRIENDS
 

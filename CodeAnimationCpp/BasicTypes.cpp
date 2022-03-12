@@ -1,7 +1,34 @@
 #include "BasicTypes.h"
+#include "TempType.h"
 
 namespace ca {
 	
+	template<typename T>
+	BasicType<T>& BasicType<T>::operator=(const TempType& b)
+	{
+		CodeAnimationController* ca = CodeAnimationController::GetInstance();
+		MSG m;
+		m.type = MsgType::SET_VAR;
+		m.set_var.varWhat = var;
+		m.set_var.isByVar = false;
+		m.set_var.valueBy = b.value;
+
+		var.value.SetVal(b.value);
+		real_value = var.value.uv.GetValue(real_value);
+
+		m.set_var.result = var.value;
+		ca->Send(m);
+
+		ca->WaitEndOfAnimation();
+		return *this;
+	}
+
+	template BasicType<int>& BasicType<int>::operator=(const TempType& b);
+	template BasicType<float>& BasicType<float>::operator=(const TempType& b);
+	template BasicType<double>& BasicType<double>::operator=(const TempType& b);
+	template BasicType<bool>& BasicType<bool>::operator=(const TempType& b);
+	template BasicType<char>& BasicType<char>::operator=(const TempType& b);
+
 	void SendChangeByMSG(Variable a, Variable b, ChangeOper co, Value result)
 	{
 		MSG m;
@@ -169,7 +196,7 @@ namespace ca {
 	void SendLogicMSG(Variable a, Variable b, LogicOper lo, Value result)
 	{
 		MSG m;
-		m.type = MsgType::OPER_COMPARE;
+		m.type = MsgType::OPER_LOGIC;
 		m.oper_logic.result = result;
 		m.oper_logic.logic_type = lo;
 		m.oper_logic.is1var = true;
@@ -186,7 +213,7 @@ namespace ca {
 	void SendLogicMSG(Variable a, Value b, LogicOper lo, Value result)
 	{
 		MSG m;
-		m.type = MsgType::OPER_COMPARE;
+		m.type = MsgType::OPER_LOGIC;
 		m.oper_logic.result = result;
 		m.oper_logic.logic_type = lo;
 		m.oper_logic.is1var = true;
@@ -203,7 +230,7 @@ namespace ca {
 	void SendLogicMSG(Value a, Variable b, LogicOper lo, Value result)
 	{
 		MSG m;
-		m.type = MsgType::OPER_COMPARE;
+		m.type = MsgType::OPER_LOGIC;
 		m.oper_logic.result = result;
 		m.oper_logic.logic_type = lo;
 		m.oper_logic.is1var = false;
@@ -220,7 +247,7 @@ namespace ca {
 	void SendLogicMSG(Value a, Value b, LogicOper lo, Value result)
 	{
 		MSG m;
-		m.type = MsgType::OPER_COMPARE;
+		m.type = MsgType::OPER_LOGIC;
 		m.oper_logic.result = result;
 		m.oper_logic.logic_type = lo;
 		m.oper_logic.is1var = false;

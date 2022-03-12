@@ -8,16 +8,18 @@ int main()
 	CA_Init();
 	CA_DebugMode();
 
-	Int(sum, i);
+	Int(a);
+	Float(b);
+	Double(c);
 
-	sum = 0;
-	i = 5;
-	While(i)
-	{
-		sum += i;
-		i--;
-	}
-	cout << "Sum = " << sum << endl;
+	a = 11;
+	b = 2;
+	c = 0;
+
+	If (a / b > 5 && !!c)
+		cout << "Res = " << a << endl;
+	Else
+		cout << "Res = " << b << endl;
 
 	CA_Quit();
 	return 0;

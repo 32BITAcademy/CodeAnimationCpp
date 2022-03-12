@@ -2,6 +2,8 @@
 #include<string>
 #include "Variable.h"
 
+//#define DETAILED_DEBUG_STRINGS
+
 namespace ca {
 
 	enum class MsgType {

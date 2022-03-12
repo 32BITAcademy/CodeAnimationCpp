@@ -25,6 +25,7 @@ namespace ca
 		std::string GetFullString();
 
 		void Set(const Value& b);
+		void SetVal(const Value& b);
 
 		template <typename T>
 		void SetValue(T v)

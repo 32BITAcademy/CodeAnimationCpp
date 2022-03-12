@@ -63,6 +63,19 @@ namespace ca {
 		return "value " + GetShortString();
 	}
 
+	void Value::SetVal(const Value& b)
+	{
+		switch (b.type)
+		{
+		case DataType::INT: SetValue(b.uv._int); break;
+		case DataType::FLOAT: SetValue(b.uv._float); break;
+		case DataType::DOUBLE: SetValue(b.uv._double); break;
+		case DataType::BOOL: SetValue(b.uv._bool); break;
+		case DataType::CHAR: SetValue(b.uv._char); break;
+		}
+		isGarbage = b.isGarbage;
+	}
+
 	void Value::Set(const Value& b)
 	{
 		/*switch (b.type)

@@ -26,5 +26,11 @@ namespace ca {
 		void SetValue(double v);
 		void SetValue(char v);
 		void SetValue(bool v);
+
+		int GetValue(int v);
+		float GetValue(float v);
+		double GetValue(double v);
+		char GetValue(char v);
+		bool GetValue(bool v);
 	};
 }

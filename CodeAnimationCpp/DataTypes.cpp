@@ -38,4 +38,10 @@ namespace ca {
 	void UniValue::SetValue(double v) { _double = v; }
 	void UniValue::SetValue(bool v) { _bool = v; }
 	void UniValue::SetValue(char v) { _char = v; }
+
+	int UniValue::GetValue(int v) {	return _int; }
+	float UniValue::GetValue(float v) {	return _float; }
+	double UniValue::GetValue(double v) {	return _double; }
+	bool UniValue::GetValue(bool v) {	return _bool; }
+	char UniValue::GetValue(char v) {	return _char; }
 }
