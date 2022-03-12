@@ -11,6 +11,8 @@ namespace ca {
 		TempType(Value v);
 		TempType(const TempType& b);
 
+		operator bool();
+
 		const TempType operator+(const TempType& b);
 		const TempType operator-(const TempType& b);
 		const TempType operator*(const TempType& b);

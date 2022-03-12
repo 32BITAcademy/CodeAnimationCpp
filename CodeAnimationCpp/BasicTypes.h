@@ -20,6 +20,11 @@ namespace ca {
 	void SendCompareMSG(Variable a, Value b, CompareOper co, Value result);
 	void SendCompareMSG(Value a, Value b, CompareOper co, Value result);
 
+	void SendLogicMSG(Variable a, Variable b, LogicOper lo, Value result);
+	void SendLogicMSG(Variable a, Value b, LogicOper lo, Value result);
+	void SendLogicMSG(Value a, Variable b, LogicOper lo, Value result);
+	void SendLogicMSG(Value a, Value b, LogicOper lo, Value result);
+
 	template <typename A>
 	std::ostream& operator<<(std::ostream& out, BasicType<A> a)
 	{

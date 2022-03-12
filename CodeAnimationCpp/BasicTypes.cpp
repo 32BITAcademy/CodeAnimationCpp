@@ -165,5 +165,73 @@ namespace ca {
 
 		ca->WaitEndOfAnimation();
 	}
+	
+	void SendLogicMSG(Variable a, Variable b, LogicOper lo, Value result)
+	{
+		MSG m;
+		m.type = MsgType::OPER_COMPARE;
+		m.oper_logic.result = result;
+		m.oper_logic.logic_type = lo;
+		m.oper_logic.is1var = true;
+		m.oper_logic.is2var = true;
+		m.oper_logic.var1 = a;
+		m.oper_logic.var2 = b;
+
+		CodeAnimationController* ca = CodeAnimationController::GetInstance();
+		ca->Send(m);
+
+		ca->WaitEndOfAnimation();
+	}
+
+	void SendLogicMSG(Variable a, Value b, LogicOper lo, Value result)
+	{
+		MSG m;
+		m.type = MsgType::OPER_COMPARE;
+		m.oper_logic.result = result;
+		m.oper_logic.logic_type = lo;
+		m.oper_logic.is1var = true;
+		m.oper_logic.is2var = false;
+		m.oper_logic.var1 = a;
+		m.oper_logic.value2 = b;
+
+		CodeAnimationController* ca = CodeAnimationController::GetInstance();
+		ca->Send(m);
+
+		ca->WaitEndOfAnimation();
+	}
+
+	void SendLogicMSG(Value a, Variable b, LogicOper lo, Value result)
+	{
+		MSG m;
+		m.type = MsgType::OPER_COMPARE;
+		m.oper_logic.result = result;
+		m.oper_logic.logic_type = lo;
+		m.oper_logic.is1var = false;
+		m.oper_logic.is2var = true;
+		m.oper_logic.value1 = a;
+		m.oper_logic.var2 = b;
+
+		CodeAnimationController* ca = CodeAnimationController::GetInstance();
+		ca->Send(m);
+
+		ca->WaitEndOfAnimation();
+	}
+
+	void SendLogicMSG(Value a, Value b, LogicOper lo, Value result)
+	{
+		MSG m;
+		m.type = MsgType::OPER_COMPARE;
+		m.oper_logic.result = result;
+		m.oper_logic.logic_type = lo;
+		m.oper_logic.is1var = false;
+		m.oper_logic.is2var = false;
+		m.oper_logic.value1 = a;
+		m.oper_logic.value2 = b;
+
+		CodeAnimationController* ca = CodeAnimationController::GetInstance();
+		ca->Send(m);
+
+		ca->WaitEndOfAnimation();
+	}
 
 }
