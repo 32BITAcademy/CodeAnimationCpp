@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="CodeAnimator">
+      <UniqueIdentifier>{11aa64de-0e5c-4c6c-a927-fc92b267a9f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -40,6 +43,15 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="BasicTypes.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeAnimator.cpp">
+      <Filter>CodeAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="CA_TextBlock.cpp">
+      <Filter>CodeAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="CA_Variable.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,7 +83,19 @@
     <ClInclude Include="DataTypes.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="CodeAnimator.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CA_TextBlock.h">
+      <Filter>CodeAnimator</Filter>
+    </ClInclude>
     <ClInclude Include="CodeAnimation.h">
+      <Filter>CodeAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="CA_Globals.h">
+      <Filter>CodeAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="CA_Variable.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

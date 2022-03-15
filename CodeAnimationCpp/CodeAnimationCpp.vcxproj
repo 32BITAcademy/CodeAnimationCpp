@@ -150,8 +150,11 @@
   <ItemGroup>
     <ClCompile Include="AlgorithmicOperators.cpp" />
     <ClCompile Include="BasicTypes.cpp" />
+    <ClCompile Include="CA_TextBlock.cpp" />
+    <ClCompile Include="CA_Variable.cpp" />
     <ClCompile Include="CodeAnimationController.cpp" />
     <ClCompile Include="DataTypes.cpp" />
+    <ClCompile Include="CodeAnimator.cpp" />
     <ClCompile Include="MSG.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TempType.cpp" />
@@ -161,9 +164,13 @@
   <ItemGroup>
     <ClInclude Include="AlgorithmicOperators.h" />
     <ClInclude Include="BasicTypes.h" />
+    <ClInclude Include="CA_Globals.h" />
+    <ClInclude Include="CA_TextBlock.h" />
+    <ClInclude Include="CA_Variable.h" />
     <ClInclude Include="CodeAnimation.h" />
     <ClInclude Include="CodeAnimationController.h" />
     <ClInclude Include="DataTypes.h" />
+    <ClInclude Include="CodeAnimator.h" />
     <ClInclude Include="MSG.h" />
     <ClInclude Include="TempType.h" />
     <ClInclude Include="TypeDefines.h" />

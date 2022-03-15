@@ -12,10 +12,6 @@ namespace ca {
 	CodeAnimationController::CodeAnimationController() : thread(&CodeAnimationController::MainCycle, this), msgs(), mutex(), animating(false)
 	{
 		debug_on = false;
-		win_width = VideoMode::getDesktopMode().width / 2;
-		win_height = VideoMode::getDesktopMode().height / 2;
-		//win = new RenderWindow(VideoMode(win_width, win_height), "Code Animation");
-		//win->setPosition({ (int)VideoMode::getDesktopMode().width , 0 });
 	}
 
 	CodeAnimationController* CodeAnimationController::GetInstance()
@@ -26,16 +22,25 @@ namespace ca {
 
 	void CodeAnimationController::MainCycle()
 	{
+		win_width = VideoMode::getDesktopMode().width / 2;
+		win_height = VideoMode::getDesktopMode().height;
+		win = new RenderWindow(VideoMode(win_width, win_height), "Code Animation");
+		win->setPosition({ win_width , 0 });
+		win->setActive();
+
 		if (debug_on)
 			cout << "Started MainCycle!" << endl;
 		while (true)
 		{
-			//sf::Event event;
-			//while (win->pollEvent(event))
-			//{
-			//	if (event.type == sf::Event::Closed)
-			//		win->close();
-			//}
+			Event event;
+			while (win->pollEvent(event))
+			{
+				if (event.type == Event::Closed)
+				{
+					win->close();
+					exit(1);
+				}
+			}
 			mutex.lock();
 			{
 				while (!msgs.empty())
@@ -78,7 +83,6 @@ namespace ca {
 					default:
 						break;
 					}
-					animating = false;
 
 					if (debug_on)
 					{
@@ -109,9 +113,12 @@ namespace ca {
 			}
 			mutex.unlock();
 
+			
 			sleep(milliseconds(16));
-			//win->clear();
-			//win->display();
+			
+			win->clear(c);
+			
+			win->display();
 		}
 		delete win;
 	}
@@ -148,7 +155,6 @@ namespace ca {
 
 	void CodeAnimationController::Send(MSG& m)
 	{
-		animating = true;
 		mutex.lock();
 		msgs.push_back(m);
 		mutex.unlock();

@@ -8,18 +8,20 @@ int main()
 	CA_Init();
 	CA_DebugMode();
 
-	Int(a);
-	Float(b);
-	Double(c);
+	Int(a, sum);
+	a = 100000;
+	sum = 0;
+	int i = 0;
+	While(a > 0)
+	{
+		
+		i = 0;
+		while (i < 2100000000)
+			i++;
+		sum += a;
+	}
 
-	a = 11;
-	b = 2;
-	c = 0;
-
-	If (a / b > 5 && !!c)
-		cout << "Res = " << a << endl;
-	Else
-		cout << "Res = " << b << endl;
+	cout << sum << endl;
 
 	CA_Quit();
 	return 0;
