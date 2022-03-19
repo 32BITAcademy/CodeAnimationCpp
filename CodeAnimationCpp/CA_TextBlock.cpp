@@ -1,5 +1,6 @@
 #include "CA_TextBlock.h"
 #include "CA_Globals.h"
+#include <iostream>
 
 #define TEXT_MARGIN_X 4
 #define TEXT_MARGIN_Y 2
@@ -18,12 +19,11 @@ namespace ca {
 		shape.setFillColor(back_color);
 		shape.setOutlineThickness(usual_outline);
 		shape.setOutlineColor(usual_outcolor);
-		shape.setOrigin(size.x / 2, size.y / 2);
 
 		text.setFillColor(text_color);
 		FloatRect r = text.getGlobalBounds();
-		shape.setSize({ r.width, r.height });
-		/*if (r.width >= size.x - TEXT_MARGIN_X)
+		shape.setOrigin(size.x / 2, size.y / 2);
+		if (r.width >= size.x - TEXT_MARGIN_X)
 		{
 			float scale = (size.x - TEXT_MARGIN_X) / r.width;
 			text.setCharacterSize(scale*font_size);
@@ -32,7 +32,9 @@ namespace ca {
 		{
 			float scale = (size.y - TEXT_MARGIN_Y) / r.height;
 			text.setCharacterSize(scale * font_size);
-		}*/
+		}
+		r = text.getLocalBounds();
+		text.setOrigin({ r.left + r.width / 2, r.top + r.height / 2 });
 	}
 
 	CA_TextBlock::~CA_TextBlock()
@@ -64,9 +66,6 @@ namespace ca {
 	void CA_TextBlock::SetPos(Vector2f pos)
 	{
 		shape.setPosition(pos);
-		FloatRect r = text.getGlobalBounds();
-		r.left = pos.x - r.width / 2;
-		r.top = pos.y - r.height / 2;
-		text.setPosition(r.left, r.top);
+		text.setPosition(pos);
 	}
 }
