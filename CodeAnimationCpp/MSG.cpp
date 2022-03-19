@@ -33,7 +33,7 @@ namespace ca {
 
 	string MSG::DebugString()
 	{
-		string s = "[CA-DEBUG] ";
+		string s = "";
 
 #ifdef DETAILED_DEBUG_STRINGS
 		switch (type)

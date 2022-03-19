@@ -18,7 +18,6 @@ int main()
 	}
 
 	cout << sum << endl;
-	sleep(seconds(1));
 
 	CA_Quit();
 	return 0;

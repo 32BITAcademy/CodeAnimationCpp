@@ -10,10 +10,12 @@ namespace ca {
 	CodeAnimationController* CodeAnimationController::instance = nullptr;
 
 	CodeAnimationController::CodeAnimationController() : thread(&CodeAnimationController::MainCycle, this),
-		msgs(), mutex(), animating(false)
+		msgs(), mutex(), animating(false),
+		win_width(VideoMode::getDesktopMode().width / 2),
+		win_height(VideoMode::getDesktopMode().height),
+		animator(win_width, win_height),
+		isRunning(true), debug_on(false), win(nullptr)
 	{
-		debug_on = false;
-		win = NULL;
 	}
 
 	CodeAnimationController* CodeAnimationController::GetInstance()
@@ -24,16 +26,13 @@ namespace ca {
 
 	void CodeAnimationController::MainCycle()
 	{
-		win_width = VideoMode::getDesktopMode().width / 2;
-		win_height = VideoMode::getDesktopMode().height;
-		animator.SetWinSize(win_width, win_height);
 		win = new RenderWindow(VideoMode(win_width, win_height), "Code Animation");
 		win->setPosition({ win_width , 0 });
 		win->setActive();
 
 		if (debug_on)
-			cout << "Started MainCycle!" << endl;
-		while (true)
+			cout << "[CA-DEBUG] Started MainCycle!" << endl;
+		while (isRunning)
 		{
 			Event event;
 			while (win->pollEvent(event))
@@ -48,7 +47,6 @@ namespace ca {
 			{
 				while (!msgs.empty())
 				{
-					sleep(seconds(1));
 					MSG m = msgs.front();
 					msgs.pop_front();
 					switch (m.type)
@@ -68,12 +66,11 @@ namespace ca {
 
 					if (debug_on)
 					{
+						cout << "[CA-DEBUG] ";
+						for (int i = 0; i < code_depth; i++)
+							cout << "    ";
 						if (m.type == MsgType::OPER_WHILE_CHECK || m.type == MsgType::OPER_FOR_CHECK)
-							for (int i = 0; i < code_depth * 4 - 1; i++)
-								cout << " ";
-						else
-							for (int i = 0; i < code_depth * 4; i++)
-								cout << " ";
+							cout << "\b";
 
 						cout << m.DebugString() << endl;
 
@@ -86,6 +83,7 @@ namespace ca {
 							m.type == MsgType::OPER_FOR_CHECK && !m.oper_for.result)
 						{
 							code_depth--;
+							cout << "[CA-DEBUG] ";
 							for (int i = 0; i < code_depth; i++)
 								cout << "    ";
 							cout << "Cycle stopped" << endl;
@@ -96,7 +94,7 @@ namespace ca {
 			mutex.unlock();
 
 			
-			//sleep(milliseconds(16));
+			sleep(milliseconds(16));
 			
 			win->clear(Color::White);
 
@@ -104,13 +102,15 @@ namespace ca {
 			
 			win->display();
 		}
+		animator.Quit();
+		win->close();
 		delete win;
 	}
 
 	CodeAnimationController::~CodeAnimationController()
 	{
+		animator.Quit();
 		thread.terminate();
-		delete win;
 	}
 
 	void CodeAnimationController::Init()
@@ -124,6 +124,8 @@ namespace ca {
 
 	void CodeAnimationController::Quit()
 	{
+		instance->isRunning = false;
+		sleep(seconds(100));
 		if (instance)
 		{
 			if (!instance->initialized) return;
@@ -142,6 +144,7 @@ namespace ca {
 		mutex.lock();
 		msgs.push_back(m);
 		mutex.unlock();
+		sleep(seconds(0.2));
 	}
 
 	bool CodeAnimationController::IsAnimating()

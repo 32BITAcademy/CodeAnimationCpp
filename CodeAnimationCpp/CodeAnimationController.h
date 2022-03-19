@@ -26,6 +26,8 @@ namespace ca {
 		CodeAnimator animator;
 
 		CodeAnimationController();
+
+		bool isRunning;
 		void MainCycle();
 
 	public:

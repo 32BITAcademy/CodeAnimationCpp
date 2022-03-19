@@ -17,12 +17,12 @@ namespace ca {
 		//std::map<std::string, CA_TextBlock*> blocks;
 
 	public:
-		CodeAnimator();
+		CodeAnimator(int w, int h);
 		~CodeAnimator();
 
-		void SetWinSize(int w, int h);
 		void Send(MSG& m);
 		void Update(sf::Time dt);
 		void Draw(sf::RenderWindow& win);
+		void Quit();
 	};
 }

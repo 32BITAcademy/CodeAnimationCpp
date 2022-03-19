@@ -6,9 +6,12 @@ using namespace std;
 
 namespace ca {
 
-	CodeAnimator::CodeAnimator() : win_width(0), win_height(0), 
+	CodeAnimator::CodeAnimator(int w, int h) : win_width(w), win_height(h), 
 		vars_count(0), vars()//, blocks()
 	{
+		vars_in_ver = (win_height - VariableGap) / ((int)VariableSize.y + VariableGap);
+		vars_in_hor = (win_width  - VariableGap) / ((int)VariableSize.x + VariableGap);
+
 		MainFont.loadFromFile("resources\\trebuc.ttf");
 		/*CA_TextBlock* a;
 		string s = "";
@@ -34,14 +37,6 @@ namespace ca {
 		for (auto x : vars)
 			delete x.second;
 		vars.clear();
-	}
-
-	void CodeAnimator::SetWinSize(int w, int h)
-	{
-		win_width = w;
-		win_height = h;
-		vars_in_ver = (win_height - VariableGap) / ((int)VariableSize.y + VariableGap);
-		vars_in_hor = (win_width - VariableGap) / ((int)VariableSize.x + VariableGap);
 	}
 
 	void CodeAnimator::Send(MSG& m)
@@ -77,6 +72,13 @@ namespace ca {
 		{
 			x.second->Draw(win);
 		}
+	}
+
+	void CodeAnimator::Quit()
+	{
+		for (auto x : vars)
+			delete x.second;
+		vars.clear();
 	}
 
 }
