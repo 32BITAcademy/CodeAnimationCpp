@@ -10,9 +10,10 @@ namespace ca {
 	CodeAnimationController* CodeAnimationController::instance = nullptr;
 
 	CodeAnimationController::CodeAnimationController() : thread(&CodeAnimationController::MainCycle, this),
-		msgs(), mutex(), animating(false), animator()
+		msgs(), mutex(), animating(false)
 	{
 		debug_on = false;
+		win = NULL;
 	}
 
 	CodeAnimationController* CodeAnimationController::GetInstance()
@@ -25,6 +26,7 @@ namespace ca {
 	{
 		win_width = VideoMode::getDesktopMode().width / 2;
 		win_height = VideoMode::getDesktopMode().height;
+		animator.SetWinSize(win_width, win_height);
 		win = new RenderWindow(VideoMode(win_width, win_height), "Code Animation");
 		win->setPosition({ win_width , 0 });
 		win->setActive();
@@ -46,6 +48,7 @@ namespace ca {
 			{
 				while (!msgs.empty())
 				{
+					sleep(seconds(1));
 					MSG m = msgs.front();
 					msgs.pop_front();
 					switch (m.type)
@@ -57,33 +60,11 @@ namespace ca {
 						win->close();
 						break;
 
-					case MsgType::CREATE_ARR:
-						break;
-
-					case MsgType::CREATE_VAR:
-						break;
-
-					case MsgType::SET_VAR:
-						break;
-
-					case MsgType::OPER_IF:
-						break;
-
-					case MsgType::OPER_WHILE_START:
-						break;
-
-					case MsgType::OPER_WHILE_CHECK:
-						break;
-
-					case MsgType::OPER_CHANGE_BY:
-						break;
-
-					case MsgType::OPER_COMPARE:
-						break;
-
 					default:
 						break;
 					}
+
+					animator.Send(m);
 
 					if (debug_on)
 					{
@@ -115,7 +96,7 @@ namespace ca {
 			mutex.unlock();
 
 			
-			sleep(milliseconds(16));
+			//sleep(milliseconds(16));
 			
 			win->clear(Color::White);
 

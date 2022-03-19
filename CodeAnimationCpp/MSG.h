@@ -214,6 +214,7 @@ namespace ca {
 		MSG(const MSG& m);
 		~MSG() { }
 		std::string DebugString();
+		std::string GetCodeString();
 	};
 
 }

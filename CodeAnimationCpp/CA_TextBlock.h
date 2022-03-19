@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "CA_Globals.h"
 
 using namespace sf;
 
@@ -10,6 +11,7 @@ namespace ca {
 		RectangleShape shape;
 		Text text;
 		bool highlighted;
+		int base_font_size;
 
 		float usual_outline, high_outline;
 		Color usual_outcolor, high_outcolor;
@@ -23,5 +25,6 @@ namespace ca {
 		void Draw(RenderWindow& win);
 		void Highlight(bool on = true);
 		void SetPos(Vector2f pos);
+		void ChangeText(std::string str);
 	};
 }

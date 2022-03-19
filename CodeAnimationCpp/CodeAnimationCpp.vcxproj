@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="AlgorithmicOperators.cpp" />
     <ClCompile Include="BasicTypes.cpp" />
+    <ClCompile Include="CA_Globals.cpp" />
     <ClCompile Include="CA_TextBlock.cpp" />
     <ClCompile Include="CA_Variable.cpp" />
     <ClCompile Include="CodeAnimationController.cpp" />

@@ -344,4 +344,44 @@ namespace ca {
 
 		return s;
 	}
+	std::string MSG::GetCodeString()
+	{
+		string s = "";
+		switch (type)
+		{
+		case MsgType::CREATE_VAR: 
+			s += DataTypeToString(create_var.var.value.type) + " " + create_var.var.name;
+			if (create_var.var.IsSet())
+				s += " = " + create_var.value.GetOnlyValue();
+			s += ";";
+			break;
+
+		case MsgType::SET_VAR:
+			s += set_var.varWhat.name;
+			s += " = ";
+			if (set_var.isByVar)
+				s += set_var.varBy.name;
+			else
+				s += set_var.valueBy.GetOnlyValue();
+			s += ";";
+			break;
+
+		case MsgType::OPER_IF: break;
+		case MsgType::OPER_WHILE_START: break;
+		case MsgType::OPER_WHILE_CHECK: break;
+		case MsgType::OPER_FOR_START: break;
+		case MsgType::OPER_FOR_CHECK: break;
+
+		case MsgType::OPER_CHANGE_BY: break;
+		case MsgType::OPER_SIGN: break;
+		case MsgType::OPER_ARITHMETIC: break;
+		case MsgType::OPER_COMPARE: break;
+		case MsgType::OPER_LOGIC: break;
+		}
+
+		if (s == "")
+			s += "Calculating something";
+
+		return s;
+	}
 }
