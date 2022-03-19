@@ -3,6 +3,6 @@
 
 namespace ca {
 
-	sf::Font MainFont;
+	extern sf::Font MainFont;
 
 }

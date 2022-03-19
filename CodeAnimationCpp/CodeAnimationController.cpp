@@ -9,7 +9,8 @@ namespace ca {
 
 	CodeAnimationController* CodeAnimationController::instance = nullptr;
 
-	CodeAnimationController::CodeAnimationController() : thread(&CodeAnimationController::MainCycle, this), msgs(), mutex(), animating(false)
+	CodeAnimationController::CodeAnimationController() : thread(&CodeAnimationController::MainCycle, this),
+		msgs(), mutex(), animating(false), animator()
 	{
 		debug_on = false;
 	}
@@ -116,7 +117,9 @@ namespace ca {
 			
 			sleep(milliseconds(16));
 			
-			win->clear(c);
+			win->clear(Color::White);
+
+			animator.Draw(*win);
 			
 			win->display();
 		}

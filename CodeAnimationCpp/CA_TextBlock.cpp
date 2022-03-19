@@ -20,9 +20,10 @@ namespace ca {
 		shape.setOutlineColor(usual_outcolor);
 		shape.setOrigin(size.x / 2, size.y / 2);
 
-		text.setColor(text_color);
+		text.setFillColor(text_color);
 		FloatRect r = text.getGlobalBounds();
-		if (r.width >= size.x - TEXT_MARGIN_X)
+		shape.setSize({ r.width, r.height });
+		/*if (r.width >= size.x - TEXT_MARGIN_X)
 		{
 			float scale = (size.x - TEXT_MARGIN_X) / r.width;
 			text.setCharacterSize(scale*font_size);
@@ -31,7 +32,7 @@ namespace ca {
 		{
 			float scale = (size.y - TEXT_MARGIN_Y) / r.height;
 			text.setCharacterSize(scale * font_size);
-		}
+		}*/
 	}
 
 	CA_TextBlock::~CA_TextBlock()

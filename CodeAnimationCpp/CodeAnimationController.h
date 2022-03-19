@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <list>
-
+#include "CodeAnimator.h"
 
 namespace ca {
 	struct MSG;
@@ -22,6 +22,8 @@ namespace ca {
 		bool animating;
 
 		int code_depth = 0;
+
+		CodeAnimator animator;
 
 		CodeAnimationController();
 		void MainCycle();

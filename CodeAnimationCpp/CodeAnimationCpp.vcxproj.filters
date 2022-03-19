@@ -83,13 +83,7 @@
     <ClInclude Include="DataTypes.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="CodeAnimator.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="CA_TextBlock.h">
-      <Filter>CodeAnimator</Filter>
-    </ClInclude>
-    <ClInclude Include="CodeAnimation.h">
       <Filter>CodeAnimator</Filter>
     </ClInclude>
     <ClInclude Include="CA_Globals.h">
@@ -97,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="CA_Variable.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeAnimation.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeAnimator.h">
+      <Filter>CodeAnimator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
