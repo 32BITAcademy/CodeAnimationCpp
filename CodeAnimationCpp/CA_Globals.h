@@ -10,10 +10,15 @@ namespace ca {
 
 	extern float FontSizeName;
 	extern float FontSizeValue;
+
+	extern float CodePanelFontSize;
 	
 	extern float OutlineThicknessHighlighted;
 
 	extern int DigitsAfterPoint;
+
+	extern float CodePanelHeight;
+	extern float CodeLabelWidth;
 	
 	class CA_Color
 	{
@@ -33,6 +38,8 @@ namespace ca {
 		static sf::Color OutlineUsual;
 		static sf::Color OutlineHighlighted;
 
+		static sf::Color CodePanelFont;
+		static sf::Color CodePanelBack;
 	};
 
 }

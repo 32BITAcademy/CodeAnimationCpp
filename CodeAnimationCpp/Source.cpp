@@ -9,7 +9,7 @@ int main()
 	//CA_DebugMode();
 
 	Int(a, sum);
-	a = 5;
+	a = 10;
 	sum = 0;
 	While(a > 0)
 	{

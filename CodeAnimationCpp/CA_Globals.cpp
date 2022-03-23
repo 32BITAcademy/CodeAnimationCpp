@@ -14,6 +14,10 @@ namespace ca {
 	float OutlineThicknessHighlighted = 5;
 	int DigitsAfterPoint = 2;
 
+	float CodePanelHeight = 100;
+	float CodeLabelWidth = 250;
+	float CodePanelFontSize = 50;
+
 	sf::Color CA_Color::IntFont(0, 0, 128);
 	sf::Color CA_Color::FloatFont(100, 80, 0);
 	sf::Color CA_Color::DoubleFont(100, 0, 0);
@@ -29,4 +33,6 @@ namespace ca {
 	sf::Color CA_Color::OutlineUsual(0, 0, 0);
 	sf::Color CA_Color::OutlineHighlighted(255, 0, 0);
 
+	sf::Color CA_Color::CodePanelFont(255, 255, 255);
+	sf::Color CA_Color::CodePanelBack(0, 40, 40);
 }

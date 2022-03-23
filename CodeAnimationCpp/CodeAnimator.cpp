@@ -7,9 +7,9 @@ using namespace std;
 namespace ca {
 
 	CodeAnimator::CodeAnimator(int w, int h) : win_width(w), win_height(h), 
-		vars_count(0), vars()//, blocks()
+		vars_count(0), vars(), panel(w) //, blocks()
 	{
-		vars_in_ver = (win_height - VariableGap) / ((int)VariableSize.y + VariableGap);
+		vars_in_ver = (win_height - VariableGap - CodePanelHeight) / ((int)VariableSize.y + VariableGap);
 		vars_in_hor = (win_width  - VariableGap) / ((int)VariableSize.x + VariableGap);
 
 		MainFont.loadFromFile("resources\\trebuc.ttf");
@@ -47,7 +47,7 @@ namespace ca {
 		{
 		case MsgType::CREATE_VAR:
 			pos.x = VariableGap + (vars_count / vars_in_ver * (VariableSize.x + VariableGap)) + VariableSize.x / 2;
-			pos.y = VariableGap + (vars_count % vars_in_ver * (VariableSize.y + VariableGap)) + VariableSize.y / 2;
+			pos.y = VariableGap + (vars_count % vars_in_ver * (VariableSize.y + VariableGap)) + VariableSize.y / 2 + CodePanelHeight;
 			vars[m.create_var.var.name] = new CA_Variable(m.create_var.var.name, m.create_var.var.value, pos);
 			vars_count++;
 			break;
@@ -68,6 +68,8 @@ namespace ca {
 
 	void CodeAnimator::Draw(sf::RenderWindow& win)
 	{
+		panel.Draw(win);
+
 		for (auto x : vars) //blocks)
 		{
 			x.second->Draw(win);
