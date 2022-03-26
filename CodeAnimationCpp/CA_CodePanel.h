@@ -5,7 +5,7 @@ using namespace std;
 
 namespace ca {
 
-	class CodePanel
+	class CA_CodePanel
 	{
 		string label_str;
 		string code_str;
@@ -13,8 +13,8 @@ namespace ca {
 		CA_TextBlock* label;
 
 	public:
-		CodePanel(int win_width);
-		~CodePanel();
+		CA_CodePanel(int win_width);
+		~CA_CodePanel();
 
 		void SetCode(string s);
 		void SetLabel(string s);

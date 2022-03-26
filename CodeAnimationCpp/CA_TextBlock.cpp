@@ -63,7 +63,7 @@ namespace ca {
 		text.setString(str);
 		text.setCharacterSize(base_font_size);
 
-		FloatRect r = text.getGlobalBounds();
+		FloatRect r = text.getLocalBounds();
 		shape.setOrigin(size.x / 2, size.y / 2);
 		if (r.width >= size.x - TEXT_MARGIN_X)
 		{

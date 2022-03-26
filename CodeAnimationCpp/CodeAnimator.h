@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 #include "CA_Variable.h"
-#include "CodePanel.h"
+#include "CA_CodePanel.h"
 
 namespace ca {
 	class CodeAnimator
@@ -13,7 +13,7 @@ namespace ca {
 		int vars_in_ver;
 		int vars_count;
 		std::map<std::string, CA_Variable*> vars;
-		CodePanel panel;
+		CA_CodePanel* panel;
 
 		//std::map<std::string, CA_TextBlock*> blocks;
 
@@ -21,6 +21,7 @@ namespace ca {
 		CodeAnimator(int w, int h);
 		~CodeAnimator();
 
+		void Init();
 		void Send(MSG& m);
 		void Update(sf::Time dt);
 		void Draw(sf::RenderWindow& win);
