@@ -54,9 +54,9 @@ namespace ca {
 
 		case MsgType::SET_VAR:
 			if (m.set_var.isByVar)
-				vars[m.set_var.varWhat.name]->ChangeValue(m.set_var.varBy.value);
+				vars[m.set_var.varWhat.name]->ChangeValue(m.set_var.result);
 			else
-				vars[m.set_var.varWhat.name]->ChangeValue(m.set_var.valueBy);
+				vars[m.set_var.varWhat.name]->ChangeValue(m.set_var.result);
 			break;
 		}
 	}

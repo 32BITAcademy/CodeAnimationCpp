@@ -134,15 +134,15 @@ namespace ca {
 				break;
 
 			case DataType::FLOAT:
-				digits += DigitsAfterPoint;
-				digits += "f";
+				sprintf_s(str, "%%.%if", DigitsAfterPoint);
+				digits = str;
 				sprintf_s(str, digits.c_str(), v.uv._float);
 				val = str;
 				break;
 
 			case DataType::DOUBLE:
-				digits += DigitsAfterPoint;
-				digits += "lf";
+				sprintf_s(str, "%%.%ilf", DigitsAfterPoint);
+				digits = str;
 				sprintf_s(str, digits.c_str(), v.uv._double);
 				val = str;
 				break;
