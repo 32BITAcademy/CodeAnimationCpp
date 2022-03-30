@@ -1,13 +1,13 @@
 #pragma once
 #include "Value.h"
-#define NAME_LENGTH 200
+#define STRING_MAX_LENGTH 200
 
 namespace ca {
 
 	struct Variable
 	{
 	public:
-		char name[NAME_LENGTH];
+		char name[STRING_MAX_LENGTH];
 		Value value;
 
 		Variable(const Variable& v);

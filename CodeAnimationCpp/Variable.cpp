@@ -5,33 +5,33 @@ using namespace std;
 namespace ca {
 	Variable::Variable(const Variable& v) : value(v.value)
 	{
-		strcpy_s(name, NAME_LENGTH, v.name);
+		strcpy_s(name, STRING_MAX_LENGTH, v.name);
 	}
 
 	Variable::Variable(const char* n, DataType t) : value()
 	{
-		strcpy_s(name, NAME_LENGTH, n);
+		strcpy_s(name, STRING_MAX_LENGTH, n);
 		value.type = t;
 	}
 	Variable::Variable(const char* n, int v) : value(v)
 	{
-		strcpy_s(name, NAME_LENGTH, n);
+		strcpy_s(name, STRING_MAX_LENGTH, n);
 	}
 	Variable::Variable(const char* n, float v) : value(v)
 	{
-		strcpy_s(name, NAME_LENGTH, n);
+		strcpy_s(name, STRING_MAX_LENGTH, n);
 	}
 	Variable::Variable(const char* n, double v) : value(v)
 	{
-		strcpy_s(name, NAME_LENGTH, n);
+		strcpy_s(name, STRING_MAX_LENGTH, n);
 	}
 	Variable::Variable(const char* n, bool v) : value(v)
 	{
-		strcpy_s(name, NAME_LENGTH, n);
+		strcpy_s(name, STRING_MAX_LENGTH, n);
 	}
 	Variable::Variable(const char* n, char v) : value(v)
 	{
-		strcpy_s(name, NAME_LENGTH, n);
+		strcpy_s(name, STRING_MAX_LENGTH, n);
 	}
 
 	std::string Variable::GetOnlyValue()
@@ -60,7 +60,7 @@ namespace ca {
 
 	const Variable& Variable::operator=(const Variable& b)
 	{
-		strcpy_s(name, NAME_LENGTH, b.name);
+		strcpy_s(name, STRING_MAX_LENGTH, b.name);
 		value = b.value;
 		return *this;
 	}

@@ -197,11 +197,13 @@ namespace ca {
 				}
 			} oper_compare;
 
-			struct {
+			struct IF_OPER {
+				char check[STRING_MAX_LENGTH];
 				bool result;
 			} oper_if;
 
-			struct {
+			struct WH_OPER {
+				char check[STRING_MAX_LENGTH];
 				bool result;
 			} oper_while;
 

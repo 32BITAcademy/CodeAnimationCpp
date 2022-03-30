@@ -57,8 +57,8 @@
     <ClCompile Include="CA_Globals.cpp">
       <Filter>CodeAnimator</Filter>
     </ClCompile>
-    <ClCompile Include="CodePanel.cpp">
-      <Filter>Исходные файлы</Filter>
+    <ClCompile Include="CA_CodePanel.cpp">
+      <Filter>CodeAnimator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,8 +104,8 @@
     <ClInclude Include="CA_Variable.h">
       <Filter>CodeAnimator</Filter>
     </ClInclude>
-    <ClInclude Include="CodePanel.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="CA_CodePanel.h">
+      <Filter>CodeAnimator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

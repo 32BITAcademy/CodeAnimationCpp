@@ -368,15 +368,107 @@ namespace ca {
 
 		case MsgType::OPER_IF: break;
 		case MsgType::OPER_WHILE_START: break;
-		case MsgType::OPER_WHILE_CHECK: break;
+		case MsgType::OPER_WHILE_CHECK:
+			s += "while ( ";
+			s += oper_while.check;
+			s += " ) ";
+			if (oper_while.result)
+				s += " => TRUE";
+			else
+				s += " => FALSE";
+			break;
 		case MsgType::OPER_FOR_START: break;
 		case MsgType::OPER_FOR_CHECK: break;
 
-		case MsgType::OPER_CHANGE_BY: break;
+		case MsgType::OPER_CHANGE_BY:
+			s += oper_change_by.varWhat.name;
+			switch (oper_change_by.change_type)
+			{
+			case ChangeOper::INCREASE_BY: s += " += "; break;
+			case ChangeOper::DECREASE_BY: s += " -= "; break;
+			case ChangeOper::MULTIPLY_BY: s += " *= "; break;
+			case ChangeOper::DIVIDE_BY: s += " /= "; break;
+			case ChangeOper::MODULO_BY: s += " %= "; break;
+			}
+			if (oper_change_by.isByVar)
+				s += oper_change_by.varBy.name;
+			else
+				s += oper_change_by.valueBy.GetOnlyValue();
+			s += ";";
+			break;
+
 		case MsgType::OPER_SIGN: break;
-		case MsgType::OPER_ARITHMETIC: break;
-		case MsgType::OPER_COMPARE: break;
-		case MsgType::OPER_LOGIC: break;
+		case MsgType::OPER_ARITHMETIC: 
+			if (oper_arithm.is1var)
+				s += oper_arithm.var1.name;
+			else
+				s += oper_arithm.value1.GetOnlyValue();
+			switch (oper_arithm.arithm_type)
+			{
+			case ArithmeticOper::ADDITION: s += " + "; break;
+			case ArithmeticOper::SUBTRACTION: s += " - "; break;
+			case ArithmeticOper::MULTIPLICATION: s += " * "; break;
+			case ArithmeticOper::DIVISION: s += " / "; break;
+			case ArithmeticOper::MODULO: s += " % "; break;
+			}
+			if (oper_arithm.is2var)
+				s += oper_arithm.var2.name;
+			else
+				s += oper_arithm.value2.GetOnlyValue();
+			s += " = ";
+			s += oper_arithm.result.GetOnlyValue();
+			break;
+
+		case MsgType::OPER_COMPARE:
+			if (oper_compare.is1var)
+				s += oper_compare.var1.name;
+			else
+				s += oper_compare.value1.GetOnlyValue();
+			switch (oper_compare.comp_type)
+			{
+			case CompareOper::EQUAL:		s += " == "; break;
+			case CompareOper::NOT_EQUAL:	s += " != "; break;
+			case CompareOper::EQ_GREATER:	s += " >= "; break;
+			case CompareOper::GREATER:		s += " > "; break;
+			case CompareOper::EQ_LESSER:	s += " <= "; break;
+			case CompareOper::LESSER:		s += " < "; break;
+			}
+			if (oper_compare.is2var)
+				s += oper_compare.var2.name;
+			else
+				s += oper_compare.value2.GetOnlyValue();
+			s += " = ";
+			s += oper_compare.result.GetOnlyValue();
+			break;
+
+		case MsgType::OPER_LOGIC:
+			if (oper_logic.logic_type == LogicOper::NOT)
+			{
+				s += "!";
+				if (oper_logic.is1var)
+					s += oper_logic.var1.name;
+				else
+					s += oper_logic.value1.GetOnlyValue();
+			}
+			else
+			{
+				if (oper_logic.is1var)
+					s += oper_logic.var1.name;
+				else
+					s += oper_logic.value1.GetOnlyValue();
+				switch (oper_logic.logic_type)
+				{
+				case LogicOper::AND:	s += " && "; break;
+				case LogicOper::OR:		s += " || "; break;
+				}
+				if (oper_logic.is2var)
+					s += oper_logic.var2.name;
+				else
+					s += oper_logic.value2.GetOnlyValue();
+			}
+			s += " = ";
+			s += oper_logic.result.GetOnlyValue();
+			break;
 		}
 
 		if (s == "")

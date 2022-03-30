@@ -111,7 +111,7 @@ namespace ca {
 
 		template  <typename S>
 		BasicType(const char* name, S v) : real_value(T(v)), var(name, GetType(T(v))) {
-			strcpy_s(var.name, NAME_LENGTH, name);
+			strcpy_s(var.name, STRING_MAX_LENGTH, name);
 			real_value = (T)v;
 			var.value.SetFull(real_value);
 

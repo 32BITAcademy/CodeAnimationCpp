@@ -154,7 +154,7 @@
     <ClCompile Include="CA_TextBlock.cpp" />
     <ClCompile Include="CA_Variable.cpp" />
     <ClCompile Include="CodeAnimationController.cpp" />
-    <ClCompile Include="CodePanel.cpp" />
+    <ClCompile Include="CA_CodePanel.cpp" />
     <ClCompile Include="DataTypes.cpp" />
     <ClCompile Include="CodeAnimator.cpp" />
     <ClCompile Include="MSG.cpp" />
@@ -171,7 +171,7 @@
     <ClInclude Include="CA_Variable.h" />
     <ClInclude Include="CodeAnimation.h" />
     <ClInclude Include="CodeAnimationController.h" />
-    <ClInclude Include="CodePanel.h" />
+    <ClInclude Include="CA_CodePanel.h" />
     <ClInclude Include="DataTypes.h" />
     <ClInclude Include="CodeAnimator.h" />
     <ClInclude Include="MSG.h" />

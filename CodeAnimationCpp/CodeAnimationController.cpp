@@ -11,7 +11,7 @@ namespace ca {
 
 	CodeAnimationController::CodeAnimationController() : thread(&CodeAnimationController::MainCycle, this),
 		msgs(), mutex(), animating(false),
-		win_width(VideoMode::getDesktopMode().width),
+		win_width(VideoMode::getDesktopMode().width/2),
 		win_height(VideoMode::getDesktopMode().height),
 		animator(win_width, win_height),
 		isRunning(true), debug_on(false), win(nullptr)
@@ -26,9 +26,10 @@ namespace ca {
 
 	void CodeAnimationController::MainCycle()
 	{
-		win = new RenderWindow(VideoMode(win_width, win_height), "Code Animation");
-		win->setPosition({ 0 , 0 });
+		win = new RenderWindow(VideoMode(win_width, win_height), "Code Animation", sf::Style::None);
+		win->setPosition({ win_width , 0 });
 		win->setActive();
+		animator.Init();
 
 		if (debug_on)
 			cout << "[CA-DEBUG] Started MainCycle!" << endl;
@@ -144,7 +145,7 @@ namespace ca {
 		mutex.lock();
 		msgs.push_back(m);
 		mutex.unlock();
-		sleep(seconds(0.2));
+		sleep(seconds(1));
 	}
 
 	bool CodeAnimationController::IsAnimating()

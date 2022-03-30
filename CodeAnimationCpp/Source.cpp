@@ -13,8 +13,8 @@ int main()
 	sum = 0;
 	While(a > 0)
 	{
-		sum = sum + a;
-		a = a - 1;
+		sum += a;
+		a--;
 	}
 
 	cout << sum << endl;
